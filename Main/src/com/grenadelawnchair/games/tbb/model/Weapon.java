@@ -1,22 +1,23 @@
 package com.grenadelawnchair.games.tbb.model;
 
-public class Weapon {
+public class Weapon extends Item {
 	
-	private String name;
-	private int damage;
+	// Index 0 is base, the following are combos (double, triple, quad etc.)
+	private int[] damage;
+	// 0..1
 	private double atkSpeed;
+	// 0 = can't parry, 1 = excellent parrying 
+	private double parry;
+	
 	private Effect effect;
 	
 	public Weapon(String name){
-		// XML stuff
+		super(name);
 	}
+
 	
-	public String getName(){
-		return name;
-	}
-	
-	public int getDamage(){
-		return damage;
+	public int getDamage(int i){
+		return damage[i];
 	}
 	
 	public double getAtkSpeed(){
@@ -27,4 +28,7 @@ public class Weapon {
 		return effect;
 	}
 
+	public double getParry(){
+		return parry;
+	}
 }
