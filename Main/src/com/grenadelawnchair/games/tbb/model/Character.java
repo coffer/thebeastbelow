@@ -6,18 +6,20 @@ public abstract class Character {
 
 	// Character Stats
 	private String name;
-	private double health;
+	private int health;
 	private double movementSpeed;
-	private double attackMultiplyer;
-	private double parryMultiplyer;
-	private double magicMultiplyer;
-	private double evasion;
+	private int strength;
+	private int agility;
+	private int intelligence;
 
 	
 	// Character Inventory and Abilities
 	private Weapon weapon;
 	private List<Ability> abilites;
 	private List<Effect> activeEffects;
+	
+	private boolean offGuard;
+	private int combo;
 	
 	public Character(String name){
 		this.name = name;
@@ -44,31 +46,67 @@ public abstract class Character {
 	}
 	
 	/**
-	 * The active effect affects the character
+	 * The active effect affects the character in some way
 	 * @param effect the effect
 	 */
 	public void affect(Effect effect){
-		switch(effect.getType()){
+		switch(effect.getAffecting()){
 		case HEALTH:
-			health += Math.round(effect.getAmount());
+			health += effect.getAmount();
 			break;
 		case SPEED:
 			movementSpeed += Math.round(effect.getAmount());
 			break;
+		case STRENGTH:
+			strength += effect.getAmount();
+			break;
+		case AGILITY:
+			agility += effect.getAmount();
+			break;
+		case INTELLIGENCE:
+			intelligence += effect.getAmount();
+			break;
 		default:
 			effect.update();
-			if(effect.getDuration() == 0){
+			if(effect.getTimeLeft() == 0){
 				activeEffects.remove(effect);
 			}
 			break;
 		}
 	}
 	
+	public void addEffect(Effect e){
+		activeEffects.add(e);
+	}
+	
+	public void affectHealth(int damage){
+		health += damage;
+	}	
+	
 	// Getters and Setters
+	public void setHealth(int i){
+		health = i;
+	}
+	
 	public void setWeapon(Weapon w){
 		weapon = w;
 	}
 	
+	public void incrementCombo(){
+		combo++;
+	}
+	
+	public void decrementCombo(){
+		combo--;
+	}
+	
+	public void setCombo(int i){
+		combo = i;
+	}
+	
+	public int getDamage(){
+		return weapon.getDamage(combo)+strength;
+	}
 	public List<Ability> getAbilities(){
 		return abilites;
 	}
@@ -90,19 +128,23 @@ public abstract class Character {
 	}
 	
 	
-	public double getAtkMultiplyer(){
-		return attackMultiplyer;
+	public int getStrenght(){
+		return strength;
+	}
+		
+	public int getAgility(){
+		return agility;
 	}
 	
-	public double getPryMultiplyer(){
-		return parryMultiplyer;
+	public int getIntelligence(){
+		return intelligence;
 	}
 	
-	public double getMgcMultiplyer(){
-		return magicMultiplyer;
+	public int getCombo(){
+		return combo;
 	}
 	
-	public double getEvasion(){
-		return evasion;
+	public boolean isOffGuard(){
+		return offGuard;
 	}
 }

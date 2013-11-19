@@ -1,13 +1,13 @@
 package com.grenadelawnchair.games.tbb.model;
 
 public class Effect {
-	public enum Type {HEALTH, SPEED}
+	public enum Affecting {HEALTH, SPEED, STRENGTH, AGILITY, INTELLIGENCE}
 	
 	private boolean passive;	
 	private String name;
 	private String desc;
-	private int duration;
-	private Type type;
+	private int timeLeft;
+	private Affecting type;
 	private double amount;
 	
 	public Effect(String name){
@@ -17,7 +17,7 @@ public class Effect {
 	
 	public void update(){
 		if(!isPassive()){
-			duration--;
+			timeLeft--;
 		}
 	}
 	
@@ -25,7 +25,7 @@ public class Effect {
 		return amount;
 	}
 	
-	public Type getType(){
+	public Affecting getAffecting(){
 		return type;
 	}
 
@@ -37,8 +37,8 @@ public class Effect {
 		return desc;
 	}
 	
-	public int getDuration(){
-		return duration;
+	public int getTimeLeft(){
+		return timeLeft;
 	}
 	
 	public boolean isPassive(){
