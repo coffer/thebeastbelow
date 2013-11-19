@@ -57,6 +57,7 @@ public class MainMenu implements Screen {
 
 	@Override
 	public void show() {
+		//TODO menuSkin.json (Ep9)
 		stage = new Stage();
 		
 		Gdx.input.setInputProcessor(stage);
