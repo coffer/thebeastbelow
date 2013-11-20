@@ -3,7 +3,6 @@ package com.grenadelawnchair.games.tbb.view;
 import aurelienribon.tweenengine.Timeline;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenManager;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -87,7 +86,7 @@ public class MainMenu implements Screen {
 		playButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				((Game) Gdx.app.getApplicationListener()).setScreen(new LevelScreen());
+				((Game) Gdx.app.getApplicationListener()).setScreen(new LevelMenu());//TODO
 			}
 		});
 		
@@ -146,11 +145,13 @@ public class MainMenu implements Screen {
 		// Table Fade in
 		Tween.from(table, ActorAccessor.Y, .5f).target(0).start(tweenManager);
 		Tween.from(table, ActorAccessor.Y, .5f).target(Gdx.graphics.getHeight() / 8).start(tweenManager);
+	
+		tweenManager.update(Gdx.graphics.getDeltaTime());
 	}
 
 	@Override
 	public void hide() {
-		
+		dispose();
 	}
 
 	@Override

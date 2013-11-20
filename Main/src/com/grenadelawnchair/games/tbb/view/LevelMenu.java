@@ -8,7 +8,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
-public class LevelScreen implements Screen {
+/**
+ * This screen displays all the playable levels of the game 
+ * that the player can choose from
+ */
+public class LevelMenu implements Screen {
 	
 	private Stage stage;
 	private Table table;
@@ -34,8 +38,8 @@ public class LevelScreen implements Screen {
 		
 		Gdx.input.setInputProcessor(stage);
 		
-		atlas = new TextureAtlas("ui/atlas.pack");
-		skin = new Skin(Gdx.files.internal("ui/menuSkin.json"), atlas);
+//		atlas = new TextureAtlas("ui/atlas.pack");
+//		skin = new Skin(Gdx.files.internal("ui/menuSkin.json"), atlas);
 		
 	}
 

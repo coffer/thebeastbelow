@@ -14,7 +14,7 @@ public class Main {
 	public static void main(String[] args) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = Constants.TITLE + " version: " + Constants.VERSION;
-		config.vSyncEnabled = true;
+		config.vSyncEnabled = true; //TODO this does not work. (See Ep12-18min)
 		config.useGL20 = true;
 		config.width = width;
 		config.height = height;
