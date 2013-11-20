@@ -6,6 +6,10 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -16,6 +20,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.grenadelawnchair.games.tbb.controller.InputController;
 
 public class GameWorld implements Screen{
@@ -32,6 +37,9 @@ public class GameWorld implements Screen{
 	private Body box;
 	private float speed = 300;
 	private Vector2 movement = new Vector2(0, 0);
+	private SpriteBatch batch;
+	private Sprite boxSprite;
+	private Array<Body> tmpBodies = new Array<Body>();
 	
 	@Override
 	public void render(float delta) {
@@ -45,6 +53,20 @@ public class GameWorld implements Screen{
 		
 		camera.position.set(box.getPosition().x, box.getPosition().y, 0);
 		camera.update();
+		
+		// Draw spites
+		batch.setProjectionMatrix(camera.combined);
+		batch.begin();
+		world.getBodies(tmpBodies);
+		for(Body body : tmpBodies){
+			if(body.getUserData() != null && body.getUserData() instanceof Sprite){
+				Sprite sprite = (Sprite) body.getUserData();
+				sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2); // Draw sprite in bottom left
+				sprite.setRotation(body.getAngle() * MathUtils.radiansToDegrees);
+				sprite.draw(batch);
+			}
+		}
+		batch.end();
 		
 		debugRenderer.render(world, camera.combined);
 	}
@@ -61,7 +83,7 @@ public class GameWorld implements Screen{
 	public void show() {
 		world  = new World(new Vector2(0, gravity), true);
 		debugRenderer = new Box2DDebugRenderer();
-		
+		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
 
 		// Input handler // TODO move this
@@ -101,47 +123,17 @@ public class GameWorld implements Screen{
 				}
 				return true;
 			}
+			
+			@Override
+			public boolean scrolled(int amount) {
+				camera.zoom += amount /25f;
+				return true;
+			}
 		});
 		
-		// BALL
-		// Body definition
+		// Setup World Objects
 		BodyDef bodyDef = new BodyDef();
-		bodyDef.type = BodyType.DynamicBody;
-		bodyDef.position.set(0, 10);
-		
-		// Shape
-		CircleShape ballShape = new CircleShape();
-		ballShape.setRadius(.5f);
-		
-		// Fixture definition
 		FixtureDef fixDef = new FixtureDef();
-		fixDef.shape = ballShape;
-		fixDef.density = 2.5f; 	// 2.5 kg/m^3
-		fixDef.friction = .25f;	// Scale 0..1 
-		fixDef.restitution = .5f;	// Bounce, scale 0..1
-		
-		// Create body and attach the fixture
-		world.createBody(bodyDef).createFixture(fixDef);
-		
-		ballShape.dispose();
-		
-		// GROUND
-		// Body definition
-		bodyDef.type = BodyType.StaticBody;
-		bodyDef.position.set(0, 0);
-		
-		// Ground shape
-		ChainShape groundShape = new ChainShape();
-		groundShape.createChain(new Vector2[] {new Vector2(-50, 0), new Vector2(50, 0)});
-		
-		// Fixture definition
-		fixDef.shape = groundShape;
-		fixDef.friction = .5f;
-		fixDef.restitution = 0;
-		
-		world.createBody(bodyDef).createFixture(fixDef);
-		
-		groundShape.dispose();
 		
 		// BOX
 		// Body definition
@@ -161,7 +153,53 @@ public class GameWorld implements Screen{
 		box = world.createBody(bodyDef);
 		box.createFixture(fixDef);
 		
+		// Set sprite
+		boxSprite = new Sprite(new Texture("graphics/charactersprites/stickdude.png"));
+		boxSprite.setSize(1, 2); // Set to the same size as the box
+		boxSprite.setOrigin(boxSprite.getWidth() / 2, boxSprite.getHeight() / 2);
+		box.setUserData(boxSprite);
+		
 		boxShape.dispose();
+				
+		// BALL
+//		// Body definition
+//		bodyDef.type = BodyType.DynamicBody;
+//		bodyDef.position.set(0, 10);
+		
+		// Shape
+		CircleShape ballShape = new CircleShape();
+		ballShape.setPosition(new Vector2(0, 1.5f));
+		ballShape.setRadius(.5f);
+		
+		// Fixture definition
+		fixDef.shape = ballShape;
+		fixDef.density = 2.5f; 	// 2.5 kg/m^3
+		fixDef.friction = .25f;	// Scale 0..1 
+		fixDef.restitution = .5f;	// Bounce, scale 0..1
+		
+		// Adding ball to box
+		box.createFixture(fixDef);
+		
+		ballShape.dispose();
+		
+		
+		// GROUND
+		// Body definition
+		bodyDef.type = BodyType.StaticBody;
+		bodyDef.position.set(0, 0);
+		
+		// Ground shape
+		ChainShape groundShape = new ChainShape();
+		groundShape.createChain(new Vector2[] {new Vector2(-50, 0), new Vector2(50, 0)});
+		
+		// Fixture definition
+		fixDef.shape = groundShape;
+		fixDef.friction = .5f;
+		fixDef.restitution = 0;
+		
+		world.createBody(bodyDef).createFixture(fixDef);
+		
+		groundShape.dispose();
 		
 	}
 
@@ -187,6 +225,7 @@ public class GameWorld implements Screen{
 	public void dispose() {
 		world.dispose();
 		debugRenderer.dispose();
+		boxSprite.getTexture().dispose();
 		
 	}
 
