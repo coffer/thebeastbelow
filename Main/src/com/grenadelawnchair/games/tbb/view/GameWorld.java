@@ -20,6 +20,8 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
+import com.badlogic.gdx.physics.box2d.joints.RopeJointDef;
 import com.badlogic.gdx.utils.Array;
 import com.grenadelawnchair.games.tbb.controller.InputController;
 
@@ -197,10 +199,40 @@ public class GameWorld implements Screen{
 		fixDef.friction = .5f;
 		fixDef.restitution = 0;
 		
-		world.createBody(bodyDef).createFixture(fixDef);
+		Body ground = world.createBody(bodyDef);
+		ground.createFixture(fixDef);
 		
 		groundShape.dispose();
 		
+		// OTHER BOX
+		bodyDef.position.y = 7;
+		PolygonShape otherBoxShape = new PolygonShape();
+		otherBoxShape.setAsBox(.25f, .25f);
+		
+		fixDef.shape = otherBoxShape;
+		
+		Body otherBox = world.createBody(bodyDef);
+		otherBox.createFixture(fixDef);
+		
+		otherBoxShape.dispose();
+		
+		// DistanceJoint between otherBox and player
+		DistanceJointDef distanceJointDef = new DistanceJointDef();
+		distanceJointDef.bodyA = otherBox;
+		distanceJointDef.bodyB = box;
+		distanceJointDef.length = 5; // At what distance?
+
+		world.createJoint(distanceJointDef);
+		
+		// RopeJoint between ground and box
+		RopeJointDef ropeJointDef = new RopeJointDef();
+		ropeJointDef.bodyA = ground;
+		ropeJointDef.bodyB = box;
+		ropeJointDef.maxLength = 4;
+		ropeJointDef.localAnchorA.set(0, 0);
+		ropeJointDef.localAnchorB.set(0, 0);
+		
+		world.createJoint(ropeJointDef);
 	}
 
 	@Override
