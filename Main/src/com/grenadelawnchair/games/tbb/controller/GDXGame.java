@@ -1,13 +1,15 @@
 package com.grenadelawnchair.games.tbb.controller;
 
 import com.badlogic.gdx.Game;
+import com.grenadelawnchair.games.tbb.view.GameWorld;
 import com.grenadelawnchair.games.tbb.view.SplashScreen;
 
 public class GDXGame extends Game {
 
 	@Override
 	public void create() {
-		setScreen(new SplashScreen());
+		// TODO set to splash
+		setScreen(new GameWorld());
 	}
 
 	@Override
