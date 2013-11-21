@@ -118,7 +118,7 @@ public class GameWorld implements Screen{
 					case Keys.SPACE:
 						for(NPCEntity npc : npcList){
 							if(validHit(player, npc) && npc.getBody().isActive()){
-								hit(player, npc);
+								CombatManager.strike(player.getGameCharacter(), npc.getGameCharacter());
 							}
 						}
 					}
@@ -183,6 +183,9 @@ public class GameWorld implements Screen{
 	}
 
 	private static boolean validHit(PlayerEntity pE, NPCEntity npcE){
+		if(!inRange(pE, npcE)){
+			return false;
+		}
 		if(pE.getDirection() == Direction.RIGHT && pE.getBody().getPosition().x 
 				< npcE.getBody().getPosition().x){
 			return true;
@@ -194,13 +197,13 @@ public class GameWorld implements Screen{
 		return false;
 	}
 	
-	public static void hit(Entity attacker, Entity subject){
-		if(attacker.getBody().getPosition().dst(subject.getBody().getPosition()) < 2){
-			System.out.println("Hit!");
-			CombatManager.strike(attacker.getGameCharacter(), subject.getGameCharacter());
+	/**
+	 * Checks if the attacker is in range of his subject
+	 */
+	public static boolean inRange(Entity attacker, Entity subject){
+		if(attacker.getBody().getPosition().dst(subject.getBody().getPosition()) < attacker.getGameCharacter().getWeapon().getRange()){
+			return true;
 		}
-		else{
-			System.out.println("Miss!");
-		}
+		return false;
 	}
 }

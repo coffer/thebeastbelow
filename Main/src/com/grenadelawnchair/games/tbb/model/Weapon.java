@@ -11,9 +11,12 @@ public class Weapon extends Item {
 	
 	private Effect effect;
 	
+	private double range;
+	
 	public Weapon(String name){
 		super(name);
 		damage = new int[] {2, 3, 5, 8, 8};
+		range = 2;
 	}
 
 	
@@ -31,5 +34,9 @@ public class Weapon extends Item {
 
 	public double getParry(){
 		return parry;
+	}
+
+	public double getRange(){
+		return range;
 	}
 }

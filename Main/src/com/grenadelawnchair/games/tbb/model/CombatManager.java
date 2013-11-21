@@ -16,10 +16,9 @@ public class CombatManager {
 	 * @param defender The defending Character
 	 */
 	public static void strike(GameCharacter attacker, GameCharacter defender){
-		System.out.println("Old health: " + defender.getHealth());
 		defender.affectHealth(attacker.getDamage());
 		attacker.incrementCombo();
-		System.out.println("New health: " + defender.getHealth());
+		System.out.println("Health: " + defender.getHealth());
 	}
 	
 	public static CombatManager getInstance(){
