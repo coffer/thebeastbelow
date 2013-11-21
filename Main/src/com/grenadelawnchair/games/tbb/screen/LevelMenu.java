@@ -3,21 +3,13 @@ package com.grenadelawnchair.games.tbb.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 /**
  * This screen displays all the playable levels of the game 
  * that the player can choose from
  */
 public class LevelMenu implements Screen {
-	
-	private Stage stage;
-	private Table table;
-	private TextureAtlas atlas;
-	private Skin skin;
+
 
 	@Override
 	public void render(float delta) {
@@ -34,10 +26,7 @@ public class LevelMenu implements Screen {
 
 	@Override
 	public void show() {
-		stage = new Stage();
-		
-		Gdx.input.setInputProcessor(stage);
-		
+	
 //		atlas = new TextureAtlas("ui/atlas.pack");
 //		skin = new Skin(Gdx.files.internal("ui/menuSkin.json"), atlas);
 		

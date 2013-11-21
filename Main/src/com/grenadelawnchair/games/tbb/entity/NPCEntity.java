@@ -42,14 +42,17 @@ public class NPCEntity implements Entity{
 		body.setFixedRotation(true);
 	}
 	
+	@Override
 	public Body getBody(){
 		return body;
 	}
 	
+	@Override
 	public Direction getDirection(){
 		return direction;
 	}
 	
+	@Override
 	public GameCharacter getGameCharacter(){
 		return npc;
 	}

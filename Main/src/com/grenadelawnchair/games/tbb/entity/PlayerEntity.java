@@ -89,14 +89,17 @@ public class PlayerEntity extends InputAdapter implements Entity {
 		return true;
 	}
 	
+	@Override
 	public Body getBody(){
 		return body;
 	}
 	
+	@Override
 	public Direction getDirection(){
 		return direction;
 	}
 	
+	@Override
 	public GameCharacter getGameCharacter(){
 		return player;
 	}

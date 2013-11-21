@@ -156,11 +156,12 @@ public class MainMenu implements Screen {
 
 	@Override
 	public void pause() {
+		//Nothing
 	}
 
 	@Override
 	public void resume() {
-		
+		// Nothing
 	}
 
 	@Override
