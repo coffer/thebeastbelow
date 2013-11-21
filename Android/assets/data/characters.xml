@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Characters>
-    <Player>
+    <Player name="Player">
     	<health>100</health>
     	<movementSpeed>200f</movementSpeed>
     	<strength>0</strength>
     	<agility>0</agility>
     	<intelligence>0</intelligence>
-    	<weapon></weapon>    
+    	<weapon>SteelSword</weapon>
+    	<abilities first="none" second="none" third="none" />
+    	<inventory first="none" second="none" third="none" />   
     </Player>
     
-    <
-    
-    
-    
-    
+    <Creep name="Creep">
+       	<health>40</health>
+    	<movementSpeed>150f</movementSpeed>
+    	<strength>0</strength>
+    	<agility>0</agility>
+    	<intelligence>0</intelligence>
+    	<weapon>SteelSword</weapon>
+	   	<abilities first="none" second="none" third="none" />   
+    </Creep>
 </Characters>
-
-private String name;
-	private int health;
-	private float movementSpeed;
-	private int strength;
-	private int agility;
-	private int intelligence;

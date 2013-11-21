@@ -1,6 +1,12 @@
 package com.grenadelawnchair.games.tbb.model;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.XmlReader;
+import com.badlogic.gdx.utils.XmlReader.Element;
 
 public class GameCharacter {
 
@@ -15,17 +21,42 @@ public class GameCharacter {
 	
 	// Character Inventory and Abilities
 	private Weapon weapon;
-	private List<Ability> abilites;
+	private List<Ability> abilities;
 	private List<Effect> activeEffects;
 	
 	private boolean offGuard;
 
 	
 	public GameCharacter(String name){
-		this.name = name;
-		movementSpeed = 150f;
-		health = 40;
-		// XML stuff
+		abilities = new ArrayList<Ability>(3);
+		try {
+			Element root = new XmlReader().parse(Gdx.files.internal("data/characters.xml"));
+			this.name = root.getChildByName(name).get("name");
+			health = (int) root.getChildByName(name).getFloat("health");
+			movementSpeed = root.getChildByName(name).getFloat("movementSpeed");
+			strength = (int) root.getChildByName(name).getFloat("strength");
+			agility = (int) root.getChildByName(name).getFloat("agility");
+			intelligence = (int) root.getChildByName(name).getFloat("intelligence");
+			weapon = new Weapon(root.getChildByName(name).get("weapon"));
+			abilities.add(new Ability(root.getChildByName(name).getChildByName("abilities").get("first")));
+			abilities.add(new Ability(root.getChildByName(name).getChildByName("abilities").get("second")));
+			abilities.add(new Ability(root.getChildByName(name).getChildByName("abilities").get("third")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		// Debug
+//		System.out.println(this.name);
+//		System.out.println(health);
+//		System.out.println(movementSpeed);
+//		System.out.println(strength);
+//		System.out.println(agility);
+//		System.out.println(intelligence);
+//		System.out.println(weapon.getName());
+//		System.out.println("First ability: " + abilities.get(0));
+//		System.out.println("Second ability: " + abilities.get(1));
+//		System.out.println("Third ability: " + abilities.get(2));
+		
 	}
 	
 	public void update(){
@@ -103,7 +134,7 @@ public class GameCharacter {
 	}
 	
 	public List<Ability> getAbilities(){
-		return abilites;
+		return abilities;
 	}
 	
 	public Weapon getWeapon(){

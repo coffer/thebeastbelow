@@ -20,11 +20,10 @@ public class Weapon extends Item {
 	private double range;
 	
 	public Weapon(String name){
-		super(name);
+		super(name, "data/weapons.xml");
 		damage = new int[5];
 		try {
 			Element root = new XmlReader().parse(Gdx.files.internal("data/weapons.xml"));
-			setName(root.getChildByName(name).get("name"));
 			damage[0] = (int) root.getChildByName(name).getChildByName("damage").getFloat("first");
 			damage[1] = (int) root.getChildByName(name).getChildByName("damage").getFloat("second");
 			damage[2] = (int) root.getChildByName(name).getChildByName("damage").getFloat("third");
@@ -36,16 +35,16 @@ public class Weapon extends Item {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		// Debug
-		System.out.println(getName());
-		System.out.println(damage[0]);
-		System.out.println(damage[1]);
-		System.out.println(damage[2]);
-		System.out.println(damage[3]);
-		System.out.println(damage[4]);
-		System.out.println(atkSpeed);
-		System.out.println(effect.getName());
-		System.out.println(range);
+//		// Debug
+//		System.out.println(getName());
+//		System.out.println(damage[0]);
+//		System.out.println(damage[1]);
+//		System.out.println(damage[2]);
+//		System.out.println(damage[3]);
+//		System.out.println(damage[4]);
+//		System.out.println(atkSpeed);
+//		System.out.println(effect.getName());
+//		System.out.println(range);
 	}
 
 	

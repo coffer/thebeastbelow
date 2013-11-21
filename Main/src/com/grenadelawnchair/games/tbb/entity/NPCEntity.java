@@ -23,7 +23,7 @@ public class NPCEntity implements Entity{
 	private GameCharacter npc;
 	
 	public NPCEntity(World world, FixtureDef fixDef, float xPos, float yPos){
-		npc = new GameCharacter("NPC");
+		npc = new GameCharacter("Creep");
 		
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
