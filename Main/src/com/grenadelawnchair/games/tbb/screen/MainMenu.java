@@ -1,4 +1,4 @@
-package com.grenadelawnchair.games.tbb.view;
+package com.grenadelawnchair.games.tbb.screen;
 
 import aurelienribon.tweenengine.Timeline;
 import aurelienribon.tweenengine.Tween;
@@ -65,7 +65,7 @@ public class MainMenu implements Screen {
 		skin = new Skin(atlas);
 		
 		table = new Table(skin);
-		table.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		table.setFillParent(true);
 		
 		//Creative Fonts
 		white = new BitmapFont(Gdx.files.internal("fonts/arialwhite.fnt"), false);
@@ -156,7 +156,6 @@ public class MainMenu implements Screen {
 
 	@Override
 	public void pause() {
-		
 	}
 
 	@Override

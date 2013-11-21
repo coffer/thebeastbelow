@@ -7,7 +7,7 @@ public abstract class Character {
 	// Character Stats
 	private String name;
 	private int health;
-	private double movementSpeed;
+	private float movementSpeed;
 	private int strength;
 	private int agility;
 	private int intelligence;
@@ -123,7 +123,7 @@ public abstract class Character {
 		return health;
 	}
 	
-	public double getMovementSpeed(){
+	public float getMovementSpeed(){
 		return movementSpeed;
 	}
 	

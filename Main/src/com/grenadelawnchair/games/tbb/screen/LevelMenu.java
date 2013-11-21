@@ -1,4 +1,4 @@
-package com.grenadelawnchair.games.tbb.view;
+package com.grenadelawnchair.games.tbb.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;

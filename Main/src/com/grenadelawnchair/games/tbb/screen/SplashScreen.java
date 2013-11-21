@@ -1,4 +1,4 @@
-package com.grenadelawnchair.games.tbb.view;
+package com.grenadelawnchair.games.tbb.screen;
 
 import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Tween;
