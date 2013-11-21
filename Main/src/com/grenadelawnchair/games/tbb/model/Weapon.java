@@ -1,5 +1,11 @@
 package com.grenadelawnchair.games.tbb.model;
 
+import java.io.IOException;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.XmlReader;
+import com.badlogic.gdx.utils.XmlReader.Element;
+
 public class Weapon extends Item {
 	
 	// Index 0 is base, the following are combos (double, triple, quad etc.)
@@ -15,8 +21,31 @@ public class Weapon extends Item {
 	
 	public Weapon(String name){
 		super(name);
-		damage = new int[] {2, 3, 5, 8, 8};
-		range = 2;
+		damage = new int[5];
+		try {
+			Element root = new XmlReader().parse(Gdx.files.internal("data/weapons.xml"));
+			setName(root.getChildByName(name).get("name"));
+			damage[0] = (int) root.getChildByName(name).getChildByName("damage").getFloat("first");
+			damage[1] = (int) root.getChildByName(name).getChildByName("damage").getFloat("second");
+			damage[2] = (int) root.getChildByName(name).getChildByName("damage").getFloat("third");
+			damage[3] = (int) root.getChildByName(name).getChildByName("damage").getFloat("forth");
+			damage[4] = (int) root.getChildByName(name).getChildByName("damage").getFloat("fifth");
+			atkSpeed = root.getChildByName(name).getFloat("attackSpeed");
+			effect = new Effect(root.getChildByName(name).getChildByName("effect").get("name"));
+			range = root.getChildByName(name).getFloat("range");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+//		// Debug
+//		System.out.println(getName());
+//		System.out.println(damage[0]);
+//		System.out.println(damage[1]);
+//		System.out.println(damage[2]);
+//		System.out.println(damage[3]);
+//		System.out.println(damage[4]);
+//		System.out.println(atkSpeed);
+//		System.out.println(effect.getName());
+//		System.out.println(range);
 	}
 
 	

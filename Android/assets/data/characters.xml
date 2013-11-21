@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Characters>
+    <Player>
+    	<health>100</health>
+    	<movementSpeed>200f</movementSpeed>
+    	<strength>0</strength>
+    	<agility>0</agility>
+    	<intelligence>0</intelligence>
+    	<weapon></weapon>    
+    </Player>
+    
+    <
+    
+    
+    
+    
+</Characters>
+
+private String name;
+	private int health;
+	private float movementSpeed;
+	private int strength;
+	private int agility;
+	private int intelligence;

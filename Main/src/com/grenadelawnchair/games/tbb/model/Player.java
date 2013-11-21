@@ -3,6 +3,8 @@ package com.grenadelawnchair.games.tbb.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.grenadelawnchair.com.games.tbb.utils.Armory;
+
 public class Player extends GameCharacter {
 
 	private List<Item> inventory;
@@ -11,7 +13,7 @@ public class Player extends GameCharacter {
 	public Player(String name) {
 		super(name);
 		setMovementSpeed(200f);
-		setWeapon(new Weapon("Malarn"));
+		setWeapon(new Weapon(Armory.SteelSword.toString()));
 		inventory = new ArrayList<Item>();
 	}
 	

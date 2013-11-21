@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<weapons>
+    <IronSword name="Iron Sword">
+        <damage first="2" second="3" third="5" forth="8" fifth="8"/>
+        <attackSpeed>1.5</attackSpeed>
+        <parry>0.4</parry>
+        <effect>"none"</effect>
+        <range>2</range>
+    </ironSword>
+    
+    <SteelSword name="Steel Sword">
+        <damage first="2" second="4" third="5" forth="8" fifth="10"/>
+        <attackSpeed>1.5</attackSpeed>
+        <parry>0.4</parry>
+        <effect name="none"/>
+        <range>2</range>
+    </SteelSword>
+    
+    <Spear name="Spear">
+        <damage first="1" second="1" third="3" forth="5" fifth="8"/>
+        <attackSpeed>1</attackSpeed>
+        <parry>0.2</parry>
+        <effect name="none"/>
+        <range>4</range>
+    </Spear>
+    
+    <Maze name="Maze">
+        <damage first="3" second="4" third="5" forth="6" fifth="6"/>
+        <attackSpeed>2</attackSpeed>
+        <parry>0.5</parry>
+        <effect name="none"/>
+        <range>2</range>
+    </Maze>
+</weapons>
