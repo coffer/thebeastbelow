@@ -13,6 +13,7 @@ public class Weapon extends Item {
 	
 	public Weapon(String name){
 		super(name);
+		damage = new int[] {2, 3, 5, 8, 8};
 	}
 
 	

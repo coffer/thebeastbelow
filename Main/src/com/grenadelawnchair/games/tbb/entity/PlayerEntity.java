@@ -9,18 +9,29 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.grenadelawnchair.com.games.tbb.utils.Direction;
+import com.grenadelawnchair.games.tbb.model.GameCharacter;
+import com.grenadelawnchair.games.tbb.model.Player;
 
-public class PlayerEntity extends InputAdapter {
+public class PlayerEntity extends InputAdapter implements Entity {
 
 	private Body body;
-	private float movementSpeed = 200f;
+	private float movementSpeed;
+	private final float MAX_SPEED = 10f;
 	private final float JUMPING_FORCE = 4000f;
 	private Vector2 velocity = new Vector2(0, 0);
 	private Vector2 currentVelocity = new Vector2(0, 0);
+	private Direction direction;
+	private Player player;
 	
+	/**
+	 * Constructor for the Player Entity
+	 */
 	public PlayerEntity(World world, FixtureDef fixDef, float xPos, float yPos){
-//		Player p = new Player("Player");
-//		movementSpeed = p.getMovementSpeed();
+		player = new Player("Player");
+		movementSpeed = player.getMovementSpeed();
+		
+		direction = Direction.RIGHT;
 		
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
@@ -42,7 +53,8 @@ public class PlayerEntity extends InputAdapter {
 	
 	public void update(){
 		currentVelocity = body.getLinearVelocity();
-		body.applyForceToCenter(velocity, true);
+		if(currentVelocity.x < MAX_SPEED && currentVelocity.x > -MAX_SPEED)
+			body.applyForceToCenter(velocity, true);
 	}
 	
 	@Override
@@ -54,14 +66,12 @@ public class PlayerEntity extends InputAdapter {
 			}
 			break;
 		case Keys.LEFT:
+			direction = Direction.LEFT;
 			velocity.x = -movementSpeed;
 			break;
 		case Keys.RIGHT:
+			direction = Direction.RIGHT;
 			velocity.x = movementSpeed;
-			break;
-		case Keys.SPACE:
-			// TODO
-			
 		}
 		return true;
 	}
@@ -69,9 +79,6 @@ public class PlayerEntity extends InputAdapter {
 	@Override
 	public boolean keyUp(int keycode) {
 		switch(keycode){
-		case Keys.UP:
-//			velocity.y = 0;
-			break;
 		case Keys.LEFT:
 		case Keys.RIGHT:
 			velocity.x = 0;
@@ -85,4 +92,13 @@ public class PlayerEntity extends InputAdapter {
 	public Body getBody(){
 		return body;
 	}
+	
+	public Direction getDirection(){
+		return direction;
+	}
+	
+	public GameCharacter getGameCharacter(){
+		return player;
+	}
+
 }

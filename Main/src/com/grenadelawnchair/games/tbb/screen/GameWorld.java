@@ -1,5 +1,7 @@
 package com.grenadelawnchair.games.tbb.screen;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -20,7 +22,11 @@ import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.grenadelawnchair.com.games.tbb.utils.Direction;
+import com.grenadelawnchair.games.tbb.entity.Entity;
+import com.grenadelawnchair.games.tbb.entity.NPCEntity;
 import com.grenadelawnchair.games.tbb.entity.PlayerEntity;
+import com.grenadelawnchair.games.tbb.model.CombatManager;
 
 public class GameWorld implements Screen{
 
@@ -36,6 +42,7 @@ public class GameWorld implements Screen{
 	private SpriteBatch batch;
 	
 	private PlayerEntity player;
+	private ArrayList<NPCEntity> npcList;
 	
 	private Array<Body> tmpBodies = new Array<Body>();
 	
@@ -48,7 +55,14 @@ public class GameWorld implements Screen{
 		
 		world.step(TIMESTEP, VELOCITYITERATIONS, POSITIONITERATIONS);
 		
-		player.update(); 
+		player.update();
+		
+		// Check if any NPC's are dead
+		for(NPCEntity npc : npcList){
+			if(npc.getGameCharacter().getHealth() < 1){
+				npc.getBody().setActive(false);
+			}
+		}
 		
 		camera.position.set(player.getBody().getPosition().x, player.getBody().getPosition().y, 0);
 		camera.update();
@@ -80,6 +94,7 @@ public class GameWorld implements Screen{
 
 	@Override
 	public void show() {
+		npcList = new ArrayList<NPCEntity>();
 		world  = new World(new Vector2(0, gravity), true);
 		debugRenderer = new Box2DDebugRenderer();
 		batch = new SpriteBatch();
@@ -100,6 +115,12 @@ public class GameWorld implements Screen{
 					case Keys.ESCAPE:
 						((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu());
 						break;
+					case Keys.SPACE:
+						for(NPCEntity npc : npcList){
+							if(validHit(player, npc) && npc.getBody().isActive()){
+								hit(player, npc);
+							}
+						}
 					}
 					return false;
 				}
@@ -110,6 +131,13 @@ public class GameWorld implements Screen{
 				}
 		}, player));
 		
+		NPCEntity npcEntity1 = new NPCEntity(world, fixDef, 5, 3);
+		NPCEntity npcEntity2 = new NPCEntity(world, fixDef, -4, 3);
+		NPCEntity npcEntity3 = new NPCEntity(world, fixDef, 8, 3);
+		npcList.add(npcEntity1);
+		npcList.add(npcEntity2);
+		npcList.add(npcEntity3);
+
 		// GROUND
 		// Body definition
 		bodyDef.type = BodyType.StaticBody;
@@ -137,13 +165,13 @@ public class GameWorld implements Screen{
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
+		// Nothing
 		
 	}
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
+		// Nothing
 		
 	}
 
@@ -154,4 +182,25 @@ public class GameWorld implements Screen{
 		
 	}
 
+	private static boolean validHit(PlayerEntity pE, NPCEntity npcE){
+		if(pE.getDirection() == Direction.RIGHT && pE.getBody().getPosition().x 
+				< npcE.getBody().getPosition().x){
+			return true;
+		}
+		else if(pE.getDirection() == Direction.LEFT && pE.getBody().getPosition().x 
+				> npcE.getBody().getPosition().x){
+			return true;
+		}
+		return false;
+	}
+	
+	public static void hit(Entity attacker, Entity subject){
+		if(attacker.getBody().getPosition().dst(subject.getBody().getPosition()) < 2){
+			System.out.println("Hit!");
+			CombatManager.strike(attacker.getGameCharacter(), subject.getGameCharacter());
+		}
+		else{
+			System.out.println("Miss!");
+		}
+	}
 }

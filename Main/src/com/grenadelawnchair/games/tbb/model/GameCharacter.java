@@ -2,7 +2,7 @@ package com.grenadelawnchair.games.tbb.model;
 
 import java.util.List;
 
-public abstract class Character {
+public class GameCharacter {
 
 	// Character Stats
 	private String name;
@@ -11,7 +11,7 @@ public abstract class Character {
 	private int strength;
 	private int agility;
 	private int intelligence;
-
+	private int combo;
 	
 	// Character Inventory and Abilities
 	private Weapon weapon;
@@ -19,10 +19,12 @@ public abstract class Character {
 	private List<Effect> activeEffects;
 	
 	private boolean offGuard;
-	private int combo;
+
 	
-	public Character(String name){
+	public GameCharacter(String name){
 		this.name = name;
+		movementSpeed = 150f;
+		health = 40;
 		// XML stuff
 	}
 	
@@ -55,7 +57,7 @@ public abstract class Character {
 			health += effect.getAmount();
 			break;
 		case SPEED:
-			movementSpeed += Math.round(effect.getAmount());
+			setMovementSpeed(getMovementSpeed() + Math.round(effect.getAmount()));
 			break;
 		case STRENGTH:
 			strength += effect.getAmount();
@@ -80,10 +82,14 @@ public abstract class Character {
 	}
 	
 	public void affectHealth(int damage){
-		health += damage;
+		health -= damage;
 	}	
 	
 	// Getters and Setters
+	public void setMovementSpeed(float movementSpeed) {
+		this.movementSpeed = movementSpeed;
+	}
+	
 	public void setHealth(int i){
 		health = i;
 	}
@@ -92,21 +98,10 @@ public abstract class Character {
 		weapon = w;
 	}
 	
-	public void incrementCombo(){
-		combo++;
-	}
-	
-	public void decrementCombo(){
-		combo--;
-	}
-	
-	public void setCombo(int i){
-		combo = i;
-	}
-	
 	public int getDamage(){
-		return weapon.getDamage(combo)+strength;
+		return weapon.getDamage(0)+strength;
 	}
+	
 	public List<Ability> getAbilities(){
 		return abilites;
 	}
@@ -127,6 +122,25 @@ public abstract class Character {
 		return movementSpeed;
 	}
 	
+	public int getCombo(){
+		return combo;
+	}
+	
+	public void incrementCombo(){
+		if(combo < 3){
+			combo++;
+		}
+	}
+	
+	public void decrementCombo(){
+		if(combo > 1){
+			combo--;
+		}
+	}
+	
+	public void setCombo(int i){
+		combo = i;
+	}
 	
 	public int getStrenght(){
 		return strength;
@@ -140,11 +154,9 @@ public abstract class Character {
 		return intelligence;
 	}
 	
-	public int getCombo(){
-		return combo;
-	}
-	
 	public boolean isOffGuard(){
 		return offGuard;
 	}
+
+	
 }

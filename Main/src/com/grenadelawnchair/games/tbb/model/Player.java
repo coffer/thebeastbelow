@@ -3,12 +3,15 @@ package com.grenadelawnchair.games.tbb.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player extends Character {
+public class Player extends GameCharacter {
 
 	private List<Item> inventory;
+
 	
 	public Player(String name) {
 		super(name);
+		setMovementSpeed(200f);
+		setWeapon(new Weapon("Malarn"));
 		inventory = new ArrayList<Item>();
 	}
 	
@@ -23,6 +26,11 @@ public class Player extends Character {
 			throw new IllegalArgumentException("Item is not in inventory");
 		}
 	}
+	
+	@Override
+	public int getDamage(){
+		return getWeapon().getDamage(getCombo())+getStrenght();
+	}
 
-
+	
 }
