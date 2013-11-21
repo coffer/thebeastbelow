@@ -10,6 +10,8 @@ import com.badlogic.gdx.utils.XmlReader.Element;
  * General Item class for items used by the player
  */
 public class Item {
+	
+	private String description;
 
 	private String name;
 	
@@ -28,6 +30,10 @@ public class Item {
 		return name;
 	}
 
+	public String getDescription(){
+		return description;
+	}
+	
 	public void setName(String name){
 		this.name = name;
 	}

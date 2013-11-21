@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Items>
+    <HealthPotion name="Health Potion">
+        <description>A magical potion that heals the drinker.</description>
+        <effect>HealthPotion</effect>
+    </HealthPotion>
+</Items>

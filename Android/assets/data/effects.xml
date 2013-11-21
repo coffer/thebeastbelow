@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Effects>
+    <HealthPotion name="Health Potion">
+    	<description>Healing 50 HP during 5 seconds</description>
+    	<duration>5</duration>
+    	<affecting>health</affecting>
+    	<amount>5</amount>			    
+    </HealthPotion>
+    
+    <Slowed name="Slowed">
+    	<description>Reduced movementspeed</description>
+    	<duration>5</duration>
+    	<affecting>speed</affecting>
+    	<amount>100</amount>			    
+    </Slowed>
+</Effects>

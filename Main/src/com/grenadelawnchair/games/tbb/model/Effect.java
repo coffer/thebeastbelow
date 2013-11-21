@@ -1,5 +1,11 @@
 package com.grenadelawnchair.games.tbb.model;
 
+import java.io.IOException;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.XmlReader;
+import com.badlogic.gdx.utils.XmlReader.Element;
+
 public class Effect {
 	public enum Affecting {HEALTH, SPEED, STRENGTH, AGILITY, INTELLIGENCE}
 	
@@ -11,8 +17,35 @@ public class Effect {
 	private double amount;
 	
 	public Effect(String name){
-		this.name = name;
-		//Search XML for effect
+		if(!name.equals("none")){
+			try {
+				Element root = new XmlReader().parse(Gdx.files.internal("data/characters.xml"));
+				this.name = root.getChildByName(name).get("name");
+				desc = root.getChildByName(name).get("description");
+				timeLeft = (int) root.getChildByName(name).getFloat("duration");
+				
+				String typeString = root.getChildByName(name).get("affecting");
+				switch(typeString){
+				case "health":
+					type = Affecting.HEALTH;
+					break;
+				case "agility":
+					type = Affecting.AGILITY;
+					break;
+				case "intelligence":
+					type = Affecting.INTELLIGENCE;
+					break;
+				case "strength":
+					type = Affecting.STRENGTH;
+					break;
+				case "speed":
+					type = Affecting.SPEED;
+				}
+				amount = root.getChildByName(name).getFloat("amount");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public void update(){

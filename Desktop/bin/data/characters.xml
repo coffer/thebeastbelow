@@ -8,7 +8,7 @@
     	<intelligence>0</intelligence>
     	<weapon>SteelSword</weapon>
     	<abilities first="none" second="none" third="none" />
-    	<inventory first="none" second="none" third="none" />   
+    	<inventory first="HealthPotion" second="HealthPotion" third="HealthPotion" />   
     </Player>
     
     <Creep name="Creep">
