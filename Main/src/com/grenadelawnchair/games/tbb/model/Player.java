@@ -3,7 +3,7 @@ package com.grenadelawnchair.games.tbb.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.grenadelawnchair.com.games.tbb.utils.Armory;
+import com.grenadelawnchair.com.games.tbb.utils.Constants;
 
 public class Player extends GameCharacter {
 
@@ -13,7 +13,7 @@ public class Player extends GameCharacter {
 	public Player(String name) {
 		super(name);
 		setMovementSpeed(200f);
-		setWeapon(new Weapon(Armory.SteelSword.toString()));
+		setWeapon(new Weapon(Constants.Armory.SteelSword.toString()));
 		inventory = new ArrayList<Item>();
 	}
 	

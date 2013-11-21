@@ -31,21 +31,21 @@ public class Weapon extends Item {
 			damage[3] = (int) root.getChildByName(name).getChildByName("damage").getFloat("forth");
 			damage[4] = (int) root.getChildByName(name).getChildByName("damage").getFloat("fifth");
 			atkSpeed = root.getChildByName(name).getFloat("attackSpeed");
-			effect = new Effect(root.getChildByName(name).getChildByName("effect").get("name"));
+			effect = new Effect(root.getChildByName(name).get("effect"));
 			range = root.getChildByName(name).getFloat("range");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-//		// Debug
-//		System.out.println(getName());
-//		System.out.println(damage[0]);
-//		System.out.println(damage[1]);
-//		System.out.println(damage[2]);
-//		System.out.println(damage[3]);
-//		System.out.println(damage[4]);
-//		System.out.println(atkSpeed);
-//		System.out.println(effect.getName());
-//		System.out.println(range);
+		// Debug
+		System.out.println(getName());
+		System.out.println(damage[0]);
+		System.out.println(damage[1]);
+		System.out.println(damage[2]);
+		System.out.println(damage[3]);
+		System.out.println(damage[4]);
+		System.out.println(atkSpeed);
+		System.out.println(effect.getName());
+		System.out.println(range);
 	}
 
 	
