@@ -24,11 +24,11 @@
         <range>4</range>
     </Spear>
     
-    <Maze name="Mace">
+    <Mace name="Mace">
         <damage first="3" second="4" third="5" forth="6" fifth="6"/>
         <attackSpeed>2</attackSpeed>
         <parry>0.5</parry>
         <effect>none</effect>
         <range>2</range>
-    </Maze>
+    </Mace>
 </weapons>

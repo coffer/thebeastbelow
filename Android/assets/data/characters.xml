@@ -6,7 +6,7 @@
     	<strength>0</strength>
     	<agility>0</agility>
     	<intelligence>0</intelligence>
-    	<weapon>SteelSword</weapon>
+    	<weapon>Mace</weapon>
     	<abilities first="none" second="none" third="none" />
     	<inventory first="HealthPotion" second="HealthPotion" third="HealthPotion" />   
     </Player>
