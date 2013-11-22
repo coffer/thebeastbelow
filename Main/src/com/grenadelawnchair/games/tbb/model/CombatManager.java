@@ -22,6 +22,7 @@ public class CombatManager {
 		if(!(defender.isParrying() && rand.nextDouble() <= defender.getWeapon().getParry())){
 			defender.affectHealth(attacker.getDamage());
 			attacker.incrementCombo();
+			System.out.println(defender.getHealth());
 		}
 		attacker.setCombo(0);
 	}

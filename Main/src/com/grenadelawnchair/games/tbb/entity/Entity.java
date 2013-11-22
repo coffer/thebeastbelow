@@ -6,6 +6,8 @@ import com.grenadelawnchair.games.tbb.model.GameCharacter;
 
 public interface Entity {
 
+	public void update();
+	
 	public Body getBody();
 	
 	public Direction getDirection();

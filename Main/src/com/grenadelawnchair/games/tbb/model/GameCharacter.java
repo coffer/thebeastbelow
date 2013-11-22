@@ -146,7 +146,7 @@ public class GameCharacter {
 		return name;
 	}
 	
-	public double getHealth(){
+	public int getHealth(){
 		return health;
 	}
 	

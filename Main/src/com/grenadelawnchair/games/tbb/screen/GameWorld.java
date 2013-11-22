@@ -22,6 +22,7 @@ import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.grenadelawnchair.com.games.tbb.utils.Constants;
 import com.grenadelawnchair.com.games.tbb.utils.Direction;
 import com.grenadelawnchair.games.tbb.entity.Entity;
 import com.grenadelawnchair.games.tbb.entity.NPCEntity;
@@ -57,11 +58,13 @@ public class GameWorld implements Screen{
 		
 		player.update();
 		
-		// Check if any NPC's are dead
+		// Check if any NPC's are dead and update those who ain't
 		for(NPCEntity npc : npcList){
 			if(npc.getGameCharacter().getHealth() < 1){
 				npc.getBody().setActive(false);
+				npc.stopPatrolling();
 			}
+			npc.update();
 		}
 		
 		camera.position.set(player.getBody().getPosition().x, player.getBody().getPosition().y, 0);
@@ -131,12 +134,13 @@ public class GameWorld implements Screen{
 				}
 		}, player));
 		
-		NPCEntity npcEntity1 = new NPCEntity(world, fixDef, 5, 3);
-		NPCEntity npcEntity2 = new NPCEntity(world, fixDef, -4, 3);
-		NPCEntity npcEntity3 = new NPCEntity(world, fixDef, 8, 3);
+		NPCEntity npcEntity1 = new NPCEntity(Constants.Characters.Creep.toString(), true, world, fixDef, 10, 3);
+		NPCEntity npcEntity2 = new NPCEntity(Constants.Characters.Creep.toString(), true, world, fixDef, -20, 3);
 		npcList.add(npcEntity1);
 		npcList.add(npcEntity2);
-		npcList.add(npcEntity3);
+		
+		npcEntity2.setPatrol(5f);
+		npcEntity2.setTarget(player);
 
 		// GROUND
 		// Body definition

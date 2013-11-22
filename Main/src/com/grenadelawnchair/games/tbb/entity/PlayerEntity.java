@@ -51,6 +51,7 @@ public class PlayerEntity extends InputAdapter implements Entity {
 
 	}
 	
+	@Override
 	public void update(){
 		currentVelocity = body.getLinearVelocity();
 		if(currentVelocity.x < MAX_SPEED && currentVelocity.x > -MAX_SPEED)
