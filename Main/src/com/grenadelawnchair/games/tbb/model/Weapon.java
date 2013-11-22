@@ -3,8 +3,8 @@ package com.grenadelawnchair.games.tbb.model;
 import java.io.IOException;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
+import com.grenadelawnchair.com.games.tbb.utils.XmlRoot;
 
 public class Weapon extends Item {
 	
@@ -23,7 +23,7 @@ public class Weapon extends Item {
 		super(name, "data/weapons.xml");
 		damage = new int[5];
 		try {
-			Element root = new XmlReader().parse(Gdx.files.internal("data/weapons.xml"));
+			Element root = XmlRoot.getInstance().parse(Gdx.files.internal("data/weapons.xml"));
 			damage[0] = (int) root.getChildByName(name).getChildByName("damage").getFloat("first");
 			damage[1] = (int) root.getChildByName(name).getChildByName("damage").getFloat("second");
 			damage[2] = (int) root.getChildByName(name).getChildByName("damage").getFloat("third");

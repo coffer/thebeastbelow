@@ -22,7 +22,8 @@ public class GameCharacter {
 	// Character Inventory and Abilities
 	private Weapon weapon;
 	private List<Ability> abilities;
-	private List<Effect> activeEffects;
+	private List<Effect> activeEffects; 
+	private boolean parrying;
 	
 	private boolean offGuard;
 
@@ -189,5 +190,7 @@ public class GameCharacter {
 		return offGuard;
 	}
 
-	
+	public boolean isParrying(){
+		return parrying;
+	}
 }

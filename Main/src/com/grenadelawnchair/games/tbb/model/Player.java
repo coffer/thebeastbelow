@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
+import com.grenadelawnchair.com.games.tbb.utils.XmlRoot;
 
 public class Player extends GameCharacter {
 
@@ -18,7 +18,7 @@ public class Player extends GameCharacter {
 		inventory = new ArrayList<Item>(3);
 		
 		try {
-			Element root = new XmlReader().parse(Gdx.files.internal("data/characters.xml"));
+			Element root = XmlRoot.getInstance().parse(Gdx.files.internal("data/characters.xml"));
 			inventory.add(new Item(root.getChildByName(name).getChildByName("inventory").get("first"), "data/items.xml"));
 			inventory.add(new Item(root.getChildByName(name).getChildByName("inventory").get("second"), "data/items.xml"));
 			inventory.add(new Item(root.getChildByName(name).getChildByName("inventory").get("third"), "data/items.xml"));

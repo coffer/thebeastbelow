@@ -3,8 +3,8 @@ package com.grenadelawnchair.games.tbb.model;
 import java.io.IOException;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
+import com.grenadelawnchair.com.games.tbb.utils.XmlRoot;
 
 public class Effect {
 	public enum Affecting {HEALTH, SPEED, STRENGTH, AGILITY, INTELLIGENCE}
@@ -19,7 +19,7 @@ public class Effect {
 	public Effect(String name){
 		if(!name.equals("none")){
 			try {
-				Element root = new XmlReader().parse(Gdx.files.internal("data/characters.xml"));
+				Element root = XmlRoot.getInstance().parse(Gdx.files.internal("data/characters.xml"));
 				this.name = root.getChildByName(name).get("name");
 				desc = root.getChildByName(name).get("description");
 				timeLeft = (int) root.getChildByName(name).getFloat("duration");

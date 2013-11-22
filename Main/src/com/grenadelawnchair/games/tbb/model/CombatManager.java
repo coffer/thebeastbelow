@@ -1,5 +1,7 @@
 package com.grenadelawnchair.games.tbb.model;
 
+import java.util.Random;
+
 /**
  * Singleton class for handling all types of combat
  */
@@ -16,9 +18,12 @@ public class CombatManager {
 	 * @param defender The defending Character
 	 */
 	public static void strike(GameCharacter attacker, GameCharacter defender){
-		defender.affectHealth(attacker.getDamage());
-		attacker.incrementCombo();
-		System.out.println("Health: " + defender.getHealth());
+		Random rand = new Random();
+		if(!(defender.isParrying() && rand.nextDouble() <= defender.getWeapon().getParry())){
+			defender.affectHealth(attacker.getDamage());
+			attacker.incrementCombo();
+		}
+		attacker.setCombo(0);
 	}
 	
 	public static CombatManager getInstance(){
