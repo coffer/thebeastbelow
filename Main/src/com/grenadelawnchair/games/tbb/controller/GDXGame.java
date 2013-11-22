@@ -2,7 +2,6 @@ package com.grenadelawnchair.games.tbb.controller;
 
 import com.badlogic.gdx.Game;
 import com.grenadelawnchair.games.tbb.screen.GameWorld;
-import com.grenadelawnchair.games.tbb.screen.SplashScreen;
 
 public class GDXGame extends Game {
 

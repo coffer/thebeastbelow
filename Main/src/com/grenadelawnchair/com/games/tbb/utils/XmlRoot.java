@@ -2,7 +2,7 @@ package com.grenadelawnchair.com.games.tbb.utils;
 
 import com.badlogic.gdx.utils.XmlReader;
 
-public class XmlRoot extends XmlReader{
+public class XmlRoot {
 	
 	private static XmlReader reader = null;
 	

@@ -190,6 +190,10 @@ public class GameCharacter {
 		return offGuard;
 	}
 
+	public void setParry(boolean state){
+		parrying = state;
+	}
+	
 	public boolean isParrying(){
 		return parrying;
 	}

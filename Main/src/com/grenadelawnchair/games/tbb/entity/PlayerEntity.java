@@ -72,6 +72,9 @@ public class PlayerEntity extends InputAdapter implements Entity {
 		case Keys.RIGHT:
 			direction = Direction.RIGHT;
 			velocity.x = movementSpeed;
+			break;
+		case Keys.ALT_LEFT:
+			getGameCharacter().setParry(true);
 		}
 		return true;
 	}
@@ -83,8 +86,8 @@ public class PlayerEntity extends InputAdapter implements Entity {
 		case Keys.RIGHT:
 			velocity.x = 0;
 			break;
-		case Keys.SPACE:
-			
+		case Keys.ALT_LEFT:
+			getGameCharacter().setParry(false);
 		}
 		return true;
 	}

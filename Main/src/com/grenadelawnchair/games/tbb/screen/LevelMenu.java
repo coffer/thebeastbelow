@@ -20,7 +20,7 @@ public class LevelMenu implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
+		// Nothing
 
 	}
 
@@ -34,26 +34,23 @@ public class LevelMenu implements Screen {
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
+		// Nothing
 
 	}
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
-
+		// Nothing
 	}
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
-
+		// Nothing
 	}
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-
+		// Nothing
 	}
 
 }
