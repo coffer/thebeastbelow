@@ -1,6 +1,7 @@
 package com.grenadelawnchair.games.tbb.entity;
 
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -23,6 +24,8 @@ public class PlayerEntity extends InputAdapter implements Entity {
 	private Vector2 currentVelocity = new Vector2(0, 0);
 	private Direction direction;
 	private Player player;
+	private float time;
+	private boolean attackOnCooldown;
 	
 	/**
 	 * Constructor for the Player Entity
@@ -53,6 +56,9 @@ public class PlayerEntity extends InputAdapter implements Entity {
 	
 	@Override
 	public void update(){
+		
+		handleAttackCooldown();
+		
 		currentVelocity = body.getLinearVelocity();
 		if(currentVelocity.x < MAX_SPEED && currentVelocity.x > -MAX_SPEED)
 			body.applyForceToCenter(velocity, true);
@@ -108,4 +114,21 @@ public class PlayerEntity extends InputAdapter implements Entity {
 		return player;
 	}
 
+	private void handleAttackCooldown(){
+		if(attackOnCooldown){
+			time += Gdx.app.getGraphics().getDeltaTime();
+			if(time >= getGameCharacter().getWeapon().getAtkSpeed()){
+			    attackOnCooldown = false;
+			    time = 0; //reset
+			}
+		}
+	}
+	
+	public void setAttackOnCooldown(boolean b){
+		attackOnCooldown = b;
+	}
+	
+	public boolean isAttackOnCooldown(){
+		return attackOnCooldown;
+	}
 }

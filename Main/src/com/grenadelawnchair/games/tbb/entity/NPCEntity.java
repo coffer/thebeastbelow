@@ -1,5 +1,6 @@
 package com.grenadelawnchair.games.tbb.entity;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -24,6 +25,8 @@ public class NPCEntity implements Entity{
 	private boolean agressive = true;
 	private float aggroDistance;
 	private boolean chase;
+	private boolean attackOnCooldown;
+	private float time;
 	
 	private boolean patroling;
 	private float patrolDistance;
@@ -56,6 +59,9 @@ public class NPCEntity implements Entity{
 	
 	@Override
 	public void update(){
+		
+		handleAttackCooldown();
+		
 		if(patroling){
 			patrol();
 		}
@@ -97,7 +103,10 @@ public class NPCEntity implements Entity{
 			}
 			// Strike the target if in range
 			if((getBody().getPosition().dst2(target.getBody().getPosition()) <= getGameCharacter().getWeapon().getRange())){
-				CombatManager.strike(getGameCharacter(), target.getGameCharacter());
+				if(!attackOnCooldown){
+					CombatManager.strike(getGameCharacter(), target.getGameCharacter());
+					attackOnCooldown = true;
+				}
 			}
 		}
 	}
@@ -153,5 +162,15 @@ public class NPCEntity implements Entity{
 	
 	public void setTarget(Entity target){
 		this.target = target;
+	}
+	
+	private void handleAttackCooldown(){
+		if(attackOnCooldown){
+			time += Gdx.app.getGraphics().getDeltaTime();
+			if(time >= getGameCharacter().getWeapon().getAtkSpeed()){
+			    attackOnCooldown = false;
+			    time = 0; //reset
+			}
+		}
 	}
 }

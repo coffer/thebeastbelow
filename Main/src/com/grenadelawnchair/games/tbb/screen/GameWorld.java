@@ -52,8 +52,6 @@ public class GameWorld implements Screen{
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		
-		
 		world.step(TIMESTEP, VELOCITYITERATIONS, POSITIONITERATIONS);
 		
 		player.update();
@@ -119,9 +117,12 @@ public class GameWorld implements Screen{
 						((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu());
 						break;
 					case Keys.SPACE:
-						for(NPCEntity npc : npcList){
-							if(validHit(player, npc) && npc.getBody().isActive()){
-								CombatManager.strike(player.getGameCharacter(), npc.getGameCharacter());
+						if(!(player.isAttackOnCooldown())){
+							for(NPCEntity npc : npcList){
+								if(validHit(player, npc) && npc.getBody().isActive()){
+									CombatManager.strike(player.getGameCharacter(), npc.getGameCharacter());
+									player.setAttackOnCooldown(true);
+								}
 							}
 						}
 					}
