@@ -59,6 +59,7 @@ public class NPCEntity implements Entity{
 	
 	@Override
 	public void update(){
+		getGameCharacter().update();
 		
 		handleAttackCooldown();
 		

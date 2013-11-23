@@ -26,9 +26,12 @@ public class GameCharacter {
 	private boolean parrying;
 	
 	private boolean offGuard;
+	
+	private float time;
 
 	
 	public GameCharacter(String name){
+		activeEffects = new ArrayList<Effect>(3);
 		abilities = new ArrayList<Ability>(3);
 		try {
 			Element root = new XmlReader().parse(Gdx.files.internal("data/characters.xml"));
@@ -61,10 +64,18 @@ public class GameCharacter {
 	}
 	
 	public void update(){
-		for(Effect e : activeEffects){
-			if(!e.isPassive()){
-				applyEffect(e);
+		time += Gdx.app.getGraphics().getDeltaTime();
+		// Every second
+		if(time >= 1){
+		    // Apply effects
+			for(Effect e : activeEffects){
+				if(!e.isPassive()){
+					applyEffect(e);
+				}
 			}
+			decrementCombo();		
+			
+		    time = 0; //reset
 		}
 	}
 	
