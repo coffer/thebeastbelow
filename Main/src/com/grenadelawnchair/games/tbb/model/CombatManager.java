@@ -23,8 +23,10 @@ public class CombatManager {
 			defender.affectHealth(attacker.getDamage());
 			attacker.incrementCombo();
 			System.out.println(defender.getHealth());
+		}else{
+			System.out.println("Parry!");
+			attacker.setCombo(0);
 		}
-		attacker.setCombo(0);
 	}
 	
 	public static CombatManager getInstance(){

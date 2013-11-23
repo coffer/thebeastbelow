@@ -187,16 +187,16 @@ public class GameWorld implements Screen{
 		
 	}
 
-	private static boolean validHit(PlayerEntity pE, NPCEntity npcE){
-		if(!inRange(pE, npcE)){
+	private static boolean validHit(Entity attacker, Entity target){
+		if(!inRange(attacker, target)){
 			return false;
 		}
-		if(pE.getDirection() == Direction.RIGHT && pE.getBody().getPosition().x 
-				< npcE.getBody().getPosition().x){
+		if(attacker.getDirection() == Direction.RIGHT && attacker.getBody().getPosition().x 
+				< target.getBody().getPosition().x){
 			return true;
 		}
-		else if(pE.getDirection() == Direction.LEFT && pE.getBody().getPosition().x 
-				> npcE.getBody().getPosition().x){
+		else if(attacker.getDirection() == Direction.LEFT && attacker.getBody().getPosition().x 
+				> target.getBody().getPosition().x){
 			return true;
 		}
 		return false;
