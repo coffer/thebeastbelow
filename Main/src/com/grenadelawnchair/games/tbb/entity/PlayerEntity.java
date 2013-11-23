@@ -1,8 +1,10 @@
 package com.grenadelawnchair.games.tbb.entity;
 
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -26,6 +28,8 @@ public class PlayerEntity extends InputAdapter implements Entity {
 	private Player player;
 	private float time;
 	private boolean attackOnCooldown;
+	private Sprite[] sprites;
+	private int currentSprite = 0;
 	
 	/**
 	 * Constructor for the Player Entity
@@ -33,8 +37,10 @@ public class PlayerEntity extends InputAdapter implements Entity {
 	public PlayerEntity(World world, FixtureDef fixDef, float xPos, float yPos){
 		player = new Player("Player");
 		movementSpeed = player.getMovementSpeed();
-		
 		direction = Direction.RIGHT;
+		
+		sprites = new Sprite[8];
+		initializeSprites();
 		
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
@@ -51,13 +57,18 @@ public class PlayerEntity extends InputAdapter implements Entity {
 		body = world.createBody(bodyDef);
 		body.createFixture(fixDef);
 		body.setFixedRotation(true);
-
+		body.setUserData(sprites[0]);
 	}
 	
 	@Override
 	public void update(){
+		
 		getGameCharacter().update();
 		handleAttackCooldown();
+		
+		System.out.println(currentSprite);
+		
+		body.setUserData(sprites[currentSprite]);
 		
 		currentVelocity = body.getLinearVelocity();
 		if(currentVelocity.x < MAX_SPEED && currentVelocity.x > -MAX_SPEED)
@@ -73,11 +84,17 @@ public class PlayerEntity extends InputAdapter implements Entity {
 			}
 			break;
 		case Keys.LEFT:
-			direction = Direction.LEFT;
+			if(direction != Direction.LEFT){
+				currentSprite = (currentSprite + 4) % 8;
+				direction = Direction.LEFT;
+			}
 			velocity.x = -movementSpeed;
 			break;
 		case Keys.RIGHT:
-			direction = Direction.RIGHT;
+			if(direction != Direction.RIGHT){
+				currentSprite = (currentSprite + 4) % 8;
+				direction = Direction.RIGHT;
+			}
 			velocity.x = movementSpeed;
 			break;
 		case Keys.ALT_LEFT:
@@ -130,5 +147,32 @@ public class PlayerEntity extends InputAdapter implements Entity {
 	
 	public boolean isAttackOnCooldown(){
 		return attackOnCooldown;
+	}
+
+	private void initializeSprites(){
+		sprites[0] = new Sprite(new Texture(Gdx.files.internal("graphics/charactersprites/player/right/idle.png")));
+		sprites[1] = new Sprite(new Texture(Gdx.files.internal("graphics/charactersprites/player/right/idlechop.png")));
+		sprites[2] = new Sprite(new Texture(Gdx.files.internal("graphics/charactersprites/player/right/run1.png")));
+		sprites[3] = new Sprite(new Texture(Gdx.files.internal("graphics/charactersprites/player/right/run2.png")));
+		sprites[4] = new Sprite(new Texture(Gdx.files.internal("graphics/charactersprites/player/left/idle.png")));
+		sprites[5] = new Sprite(new Texture(Gdx.files.internal("graphics/charactersprites/player/left/idlechop.png")));
+		sprites[6] = new Sprite(new Texture(Gdx.files.internal("graphics/charactersprites/player/left/run1.png")));
+		sprites[7] = new Sprite(new Texture(Gdx.files.internal("graphics/charactersprites/player/left/run2.png")));
+		for(int i = 0; i < sprites.length; i++){
+			sprites[i].setSize(2, 2); // Size of body
+		}
+	}
+
+	@Override
+	public void setSprite(int spriteindex){
+		body.setUserData(sprites[spriteindex]);
+		currentSprite = spriteindex;
+	}
+	
+	@Override
+	public void dispose(){
+		for(int i = 0; i < sprites.length; i++){
+			sprites[0].getTexture().dispose();
+		}
 	}
 }

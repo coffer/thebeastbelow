@@ -35,7 +35,7 @@ public class GameWorld implements Screen{
 	private Box2DDebugRenderer debugRenderer;
 	private float gravity = -9.81f;
 	private OrthographicCamera camera;
-	private final int ZOOM = 25;
+	private final int ZOOM = 50;
 	
 	private final float TIMESTEP = 1 / 60f;
 	private final int VELOCITYITERATIONS = 8, POSITIONITERATIONS = 3; // Can be set to higher if higher quality is desired
@@ -179,6 +179,10 @@ public class GameWorld implements Screen{
 	public void dispose() {
 		world.dispose();
 		debugRenderer.dispose();
+		player.dispose();
+		for(NPCEntity e : npcList){
+			e.dispose();
+		}
 		
 	}
 

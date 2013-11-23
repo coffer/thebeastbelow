@@ -1,14 +1,13 @@
 package com.grenadelawnchair.games.tbb.controller;
 
 import com.badlogic.gdx.Game;
-import com.grenadelawnchair.games.tbb.screen.AnimationTest;
 import com.grenadelawnchair.games.tbb.screen.GameWorld;
 
 public class GDXGame extends Game {
 
 	@Override
 	public void create() {
-		setScreen(new AnimationTest());
+		setScreen(new GameWorld());
 	}
 
 	@Override

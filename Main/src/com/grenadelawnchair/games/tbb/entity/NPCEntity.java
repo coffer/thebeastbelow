@@ -185,4 +185,16 @@ public class NPCEntity implements Entity{
 		target = null;
 		chase = false;
 	}
+
+	@Override
+	public void dispose() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setSprite(int spriteIndex) {
+		// TODO Auto-generated method stub
+		
+	}
 }

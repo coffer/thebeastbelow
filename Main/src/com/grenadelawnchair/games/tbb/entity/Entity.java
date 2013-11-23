@@ -13,4 +13,12 @@ public interface Entity {
 	public Direction getDirection();
 	
 	public GameCharacter getGameCharacter();
+
+	public void dispose();
+	
+	/**
+	 * sprite index obtained from Constants class
+	 * @param spriteIndex
+	 */
+	public void setSprite(int spriteIndex);
 }

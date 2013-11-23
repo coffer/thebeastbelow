@@ -24,4 +24,8 @@ public class Constants {
 	public enum Effects {
 		HealthPotion, Slowed;
 	}
+
+	public static final int IDLESPRITE_RIGHT = 0, IDLESPRITE_LEFT = 4, ATTACKSPRITE_RIGHT = 1,
+			ATTACKSPRITE_LEFT = 5, RUNSPRITE1_RIGHT = 2, RUNSPRITE1_LEFT = 6, RUNSPRITE2_RIGHT = 3,
+			RUNSPRITE2_LEFT = 7;
 }
