@@ -63,6 +63,10 @@ public class NPCEntity implements Entity{
 		
 		handleAttackCooldown();
 		
+		if(getGameCharacter().getHealth() < 1){
+			die();
+		}
+		
 		if(patroling){
 			patrol();
 		}
@@ -173,5 +177,12 @@ public class NPCEntity implements Entity{
 			    time = 0; //reset
 			}
 		}
+	}
+	
+	public void die(){
+		getBody().setActive(false);
+		stopPatrolling();
+		target = null;
+		chase = false;
 	}
 }

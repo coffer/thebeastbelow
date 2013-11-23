@@ -19,7 +19,7 @@ public class CombatManager {
 	 */
 	public static void strike(GameCharacter attacker, GameCharacter defender){
 		Random rand = new Random();
-		if(!(defender.isParrying() && rand.nextDouble() <= defender.getWeapon().getParry())){
+		if(!(defender.isParrying()) && rand.nextDouble() > defender.getWeapon().getParry()){
 			defender.affectHealth(attacker.getDamage());
 			attacker.incrementCombo();
 			System.out.println(defender.getHealth());

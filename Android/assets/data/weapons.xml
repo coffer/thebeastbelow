@@ -3,7 +3,7 @@
     <IronSword name="Iron Sword">
         <damage first="2" second="3" third="5" forth="8" fifth="8"/>
         <attackSpeed>1.5</attackSpeed>
-        <parry>0.4</parry>
+        <parry>1</parry>
         <effect>none</effect>
         <range>2</range>
     </ironSword>

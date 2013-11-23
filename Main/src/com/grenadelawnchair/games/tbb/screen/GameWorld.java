@@ -58,10 +58,6 @@ public class GameWorld implements Screen{
 		
 		// Check if any NPC's are dead and update those who ain't
 		for(NPCEntity npc : npcList){
-			if(npc.getGameCharacter().getHealth() < 1){
-				npc.getBody().setActive(false);
-				npc.stopPatrolling();
-			}
 			npc.update();
 		}
 		
@@ -109,7 +105,6 @@ public class GameWorld implements Screen{
 		
 		// Input handling
 		Gdx.input.setInputProcessor(new InputMultiplexer(new InputAdapter() {
-			
 				@Override
 				public boolean keyDown(int keycode) {
 					switch(keycode) {
@@ -117,7 +112,7 @@ public class GameWorld implements Screen{
 						((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu());
 						break;
 					case Keys.SPACE:
-						if(!(player.isAttackOnCooldown())){
+						if(!(player.isAttackOnCooldown() || player.getGameCharacter().isParrying())){
 							for(NPCEntity npc : npcList){
 								if(validHit(player, npc) && npc.getBody().isActive()){
 									CombatManager.strike(player.getGameCharacter(), npc.getGameCharacter());

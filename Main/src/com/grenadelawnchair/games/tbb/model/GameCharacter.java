@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
 
 public class GameCharacter {
-
+	//TODO combo always decrements. it shouldn't
 	// Character Stats
 	private String name;
 	private int health;
