@@ -228,7 +228,6 @@ public class GameWorld implements Screen{
 		for(NPCEntity e : npcList){
 			e.dispose();
 		}
-		
 	}
 
 	private static boolean validHit(Entity attacker, Entity target){

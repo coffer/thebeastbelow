@@ -25,8 +25,8 @@ public class PlayerEntity extends InputAdapter implements Entity {
 
 	private Body body;
 	private float movementSpeed;
-	private final float MAX_SPEED = 10f;
-	private final float JUMPING_FORCE = 4000f;
+	private final float MAX_SPEED = 5f;
+	private final float JUMPING_FORCE = 2000f;
 	private Vector2 velocity = new Vector2(0, 0);
 	private Vector2 currentVelocity = new Vector2(0, 0);
 	private Direction direction;
@@ -54,7 +54,7 @@ public class PlayerEntity extends InputAdapter implements Entity {
 		bodyDef.type = BodyType.DynamicBody;
 		bodyDef.position.set(xPos, yPos);
 		
-		fixDef.density = 5;
+		fixDef.density = 5; // Should be around 1000
 		fixDef.friction = 1;
 		fixDef.restitution = .2f;
 		
@@ -73,33 +73,13 @@ public class PlayerEntity extends InputAdapter implements Entity {
 		getGameCharacter().update();
 		handleAttackCooldown();
 		
+		checkKbd();
+		
 		currentVelocity = body.getLinearVelocity();
 		if(currentVelocity.x < MAX_SPEED && currentVelocity.x > -MAX_SPEED)
 			body.applyForceToCenter(velocity, true);
 		
 		playAnimation();
-	}
-	
-	@Override
-	public boolean keyDown(int keycode) {
-		switch(keycode){
-		case Keys.UP:
-			if(currentVelocity.y == 0){
-				body.applyForce(0, JUMPING_FORCE, 0, 0, true);
-			}
-			break;
-		case Keys.LEFT:
-			direction = Direction.LEFT;
-			velocity.x = -movementSpeed;
-			break;
-		case Keys.RIGHT:
-			direction = Direction.RIGHT;
-			velocity.x = movementSpeed;
-			break;
-		case Keys.ALT_LEFT:
-			getGameCharacter().setParry(true);
-		}
-		return true;
 	}
 	
 	@Override
@@ -163,13 +143,13 @@ public class PlayerEntity extends InputAdapter implements Entity {
 		
 		// ANIMATIONS
 		// Strike right
-		Animation animation = new Animation(1 / 4f, new TextureRegion(sprites[1]), new TextureRegion(sprites[0]));
+		Animation animation = new Animation(1 / 2f, new TextureRegion(sprites[1]), new TextureRegion(sprites[0]));
 		animation.setPlayMode(Animation.LOOP);
 		strikeRight = new AnimatedSprite(animation, true);
 		strikeRight.setSize(2, 2);
 		
 		// Strike left
-		animation = new Animation(1 / 4f, new TextureRegion(sprites[5]), new TextureRegion(sprites[4]));
+		animation = new Animation(1 / 2f, new TextureRegion(sprites[5]), new TextureRegion(sprites[4]));
 		animation.setPlayMode(Animation.LOOP);
 		strikeLeft = new AnimatedSprite(animation, true);
 		strikeLeft.setSize(2, 2);
@@ -219,7 +199,7 @@ public class PlayerEntity extends InputAdapter implements Entity {
 			    animationCooldown = 0; //reset
 			}
 		}
-		
+		// If the striking cooldown is 0, display normal animations
 		if(striking){
 			if(direction == Direction.LEFT){
 				body.setUserData(strikeLeft);
@@ -227,20 +207,40 @@ public class PlayerEntity extends InputAdapter implements Entity {
 				body.setUserData(strikeRight);
 			}
 		}else{
-			if(body.getLinearVelocity().x != 0){
+			if(body.getLinearVelocity().x == 0 && !Gdx.input.isKeyPressed(Input.Keys.LEFT) && !Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
+				if(direction == Direction.LEFT){
+					body.setUserData(idleLeft);
+				}else{
+					body.setUserData(idleRight);
+				}
+			}else{
 				if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
 					body.setUserData(runLeft);
 				}
 				else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
 					body.setUserData(runRight);
 				}
-			}else{
-				if(direction == Direction.LEFT){
-					body.setUserData(idleLeft);
-				}else{
-					body.setUserData(idleRight);
-				}
 			}
+			
+		}
+	}
+	
+	private void checkKbd(){
+		if(Gdx.input.isKeyPressed(Input.Keys.UP)){
+			if(currentVelocity.y == 0){
+				body.applyForce(0, JUMPING_FORCE, 0, 0, true);
+			}
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
+			direction = Direction.LEFT;
+			velocity.x = -movementSpeed;
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
+			direction = Direction.RIGHT;
+			velocity.x = movementSpeed;
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT)){
+			getGameCharacter().setParry(true);
 		}
 	}
 }
