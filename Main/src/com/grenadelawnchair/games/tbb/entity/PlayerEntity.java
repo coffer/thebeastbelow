@@ -68,7 +68,6 @@ public class PlayerEntity extends InputAdapter implements Entity {
 	
 	@Override
 	public void update(){
-		
 		getGameCharacter().update();
 		handleAttackCooldown();
 		
@@ -76,21 +75,7 @@ public class PlayerEntity extends InputAdapter implements Entity {
 		if(currentVelocity.x < MAX_SPEED && currentVelocity.x > -MAX_SPEED)
 			body.applyForceToCenter(velocity, true);
 		
-		if(body.getLinearVelocity().x != 0){
-			if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-				body.setUserData(runLeft);
-			}
-			else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
-				body.setUserData(runRight);
-			}
-		}else{
-			if(direction == Direction.LEFT){
-				body.setUserData(idleLeft);
-			}else{
-				body.setUserData(idleRight);
-			}
-		}
-		
+		playAnimation();
 	}
 	
 	@Override
@@ -176,14 +161,14 @@ public class PlayerEntity extends InputAdapter implements Entity {
 		
 		// ANIMATIONS
 		// Strike right
-		Animation animation = new Animation(1 / 3f, new TextureRegion(sprites[0]), new TextureRegion(sprites[1]), new TextureRegion(sprites[0]));
-		animation.setPlayMode(Animation.NORMAL);
+		Animation animation = new Animation(1 / 4f, new TextureRegion(sprites[1]), new TextureRegion(sprites[0]));
+		animation.setPlayMode(Animation.LOOP);
 		strikeRight = new AnimatedSprite(animation, true);
 		strikeRight.setSize(2, 2);
 		
 		// Strike left
-		animation = new Animation(1 / 3f, new TextureRegion(sprites[4]), new TextureRegion(sprites[5]), new TextureRegion(sprites[4]));
-		animation.setPlayMode(Animation.NORMAL);
+		animation = new Animation(1 / 4f, new TextureRegion(sprites[5]), new TextureRegion(sprites[4]));
+		animation.setPlayMode(Animation.LOOP);
 		strikeLeft = new AnimatedSprite(animation, true);
 		strikeLeft.setSize(2, 2);
 	
@@ -216,6 +201,31 @@ public class PlayerEntity extends InputAdapter implements Entity {
 	public void dispose(){
 		for(int i = 0; i < sprites.length; i++){
 			sprites[0].getTexture().dispose();
+		}
+	}
+
+	private void playAnimation(){
+		if(Gdx.input.isKeyPressed(Input.Keys.SPACE) && !isAttackOnCooldown()){
+			if(direction == Direction.LEFT){
+				body.setUserData(strikeLeft);
+			}else{
+				body.setUserData(strikeRight);
+			}
+		}else{
+			if(body.getLinearVelocity().x != 0){
+				if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
+					body.setUserData(runLeft);
+				}
+				else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
+					body.setUserData(runRight);
+				}
+			}else{
+				if(direction == Direction.LEFT){
+					body.setUserData(idleLeft);
+				}else{
+					body.setUserData(idleRight);
+				}
+			}
 		}
 	}
 }
