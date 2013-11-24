@@ -37,6 +37,7 @@ public class PlayerEntity extends InputAdapter implements Entity {
 	
 	private AnimatedSprite strikeRight, strikeLeft, runRight, runLeft, idleRight, idleLeft;
 	private boolean striking;
+	private float animationCooldown;
 	
 	/**
 	 * Constructor for the Player Entity
@@ -163,13 +164,13 @@ public class PlayerEntity extends InputAdapter implements Entity {
 		// ANIMATIONS
 		// Strike right
 		Animation animation = new Animation(1 / 4f, new TextureRegion(sprites[1]), new TextureRegion(sprites[0]));
-		animation.setPlayMode(Animation.NORMAL);
+		animation.setPlayMode(Animation.LOOP);
 		strikeRight = new AnimatedSprite(animation, true);
 		strikeRight.setSize(2, 2);
 		
 		// Strike left
 		animation = new Animation(1 / 4f, new TextureRegion(sprites[5]), new TextureRegion(sprites[4]));
-		animation.setPlayMode(Animation.NORMAL);
+		animation.setPlayMode(Animation.LOOP);
 		strikeLeft = new AnimatedSprite(animation, true);
 		strikeLeft.setSize(2, 2);
 	
@@ -206,18 +207,26 @@ public class PlayerEntity extends InputAdapter implements Entity {
 	}
 
 	private void playAnimation(){
-		if(!attackOnCooldown){
-			striking = false;
-		}
 		if(Gdx.input.isKeyPressed(Input.Keys.SPACE) && !isAttackOnCooldown()){
 			striking = true;
+			setAttackOnCooldown(true);
+		}
+		// Set the timer for the attack animation
+		if(striking){
+			animationCooldown += Gdx.app.getGraphics().getDeltaTime();
+			if(animationCooldown >= 1/2f){
+			    striking = false;
+			    animationCooldown = 0; //reset
+			}
+		}
+		
+		if(striking){
 			if(direction == Direction.LEFT){
 				body.setUserData(strikeLeft);
 			}else{
 				body.setUserData(strikeRight);
 			}
-			setAttackOnCooldown(true);
-		}else if(!striking){
+		}else{
 			if(body.getLinearVelocity().x != 0){
 				if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
 					body.setUserData(runLeft);
