@@ -35,7 +35,7 @@ public class GameWorld implements Screen{
 	private Box2DDebugRenderer debugRenderer;
 	private float gravity = -9.81f;
 	private OrthographicCamera camera;
-	private final int ZOOM = 50;
+	private final int ZOOM = 25;
 	
 	private final float TIMESTEP = 1 / 60f;
 	private final int VELOCITYITERATIONS = 8, POSITIONITERATIONS = 3; // Can be set to higher if higher quality is desired
@@ -64,7 +64,7 @@ public class GameWorld implements Screen{
 		camera.position.set(player.getBody().getPosition().x, player.getBody().getPosition().y, 0);
 		camera.update();
 		
-		// Draw spites
+//		// Draw spites
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		world.getBodies(tmpBodies);
@@ -76,6 +76,7 @@ public class GameWorld implements Screen{
 				sprite.draw(batch);
 			}
 		}
+
 		batch.end();
 		
 		debugRenderer.render(world, camera.combined);
@@ -113,6 +114,7 @@ public class GameWorld implements Screen{
 						break;
 					case Keys.SPACE:
 						if(!(player.isAttackOnCooldown() || player.getGameCharacter().isParrying())){
+							player.playStrikeAnimation();
 							for(NPCEntity npc : npcList){
 								if(validHit(player, npc) && npc.getBody().isActive()){
 									CombatManager.strike(player.getGameCharacter(), npc.getGameCharacter());

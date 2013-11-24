@@ -1,10 +1,14 @@
 package com.grenadelawnchair.games.tbb.entity;
 
+import net.dermetfan.utils.libgdx.graphics.AnimatedSprite;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -30,6 +34,9 @@ public class PlayerEntity extends InputAdapter implements Entity {
 	private boolean attackOnCooldown;
 	private Sprite[] sprites;
 	private int currentSprite = 0;
+	
+	private AnimatedSprite strikeRight, strikeLeft, runRight, runLeft;
+	private float animationStartTime;
 	
 	/**
 	 * Constructor for the Player Entity
@@ -65,8 +72,6 @@ public class PlayerEntity extends InputAdapter implements Entity {
 		
 		getGameCharacter().update();
 		handleAttackCooldown();
-		
-		System.out.println(currentSprite);
 		
 		body.setUserData(sprites[currentSprite]);
 		
@@ -161,6 +166,27 @@ public class PlayerEntity extends InputAdapter implements Entity {
 		for(int i = 0; i < sprites.length; i++){
 			sprites[i].setSize(2, 2); // Size of body
 		}
+		
+		// Animations
+		Animation animation = new Animation(1 / 3f, new TextureRegion(sprites[0]), new TextureRegion(sprites[1]), new TextureRegion(sprites[0]));
+		animation.setPlayMode(Animation.NORMAL);
+		strikeRight = new AnimatedSprite(animation, true);
+		strikeRight.setSize(2, 2);
+		
+		animation = new Animation(1 / 3f, new TextureRegion(sprites[4]), new TextureRegion(sprites[5]), new TextureRegion(sprites[4]));
+		animation.setPlayMode(Animation.NORMAL);
+		strikeLeft = new AnimatedSprite(animation, true);
+		strikeLeft.setSize(2, 2);
+		
+		animation = new Animation(1 / 20f, new TextureRegion(sprites[2]), new TextureRegion(sprites[3]));
+		animation.setPlayMode(Animation.LOOP);
+		runRight = new AnimatedSprite(animation, true);
+		runRight.setSize(2, 2);
+		
+		animation = new Animation(1 / 20f, new TextureRegion(sprites[6]), new TextureRegion(sprites[7]));
+		animation.setPlayMode(Animation.NORMAL);
+		runLeft = new AnimatedSprite(animation, true);
+		runLeft.setSize(2, 2);
 	}
 
 	@Override
@@ -174,5 +200,18 @@ public class PlayerEntity extends InputAdapter implements Entity {
 		for(int i = 0; i < sprites.length; i++){
 			sprites[0].getTexture().dispose();
 		}
+	}
+
+	public void playStrikeAnimation(){
+		animationStartTime = Gdx.graphics.getDeltaTime();
+		if(direction == Direction.LEFT){
+			body.setUserData(strikeLeft);
+		}else{
+			body.setUserData(strikeRight);
+		}
+	}
+	
+	private boolean isAnimating(){
+		return (strikeLeft.getAnimation().isAnimationFinished(animationStartTime) && strikeRight.getAnimation().isAnimationFinished(animationStartTime));
 	}
 }
