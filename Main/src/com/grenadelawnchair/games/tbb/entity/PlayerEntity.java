@@ -3,6 +3,7 @@ package com.grenadelawnchair.games.tbb.entity;
 import net.dermetfan.utils.libgdx.graphics.AnimatedSprite;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Texture;
@@ -33,10 +34,8 @@ public class PlayerEntity extends InputAdapter implements Entity {
 	private float time;
 	private boolean attackOnCooldown;
 	private Sprite[] sprites;
-	private int currentSprite = 0;
 	
-	private AnimatedSprite strikeRight, strikeLeft, runRight, runLeft;
-	private float animationStartTime;
+	private AnimatedSprite strikeRight, strikeLeft, runRight, runLeft, idleRight, idleLeft;
 	
 	/**
 	 * Constructor for the Player Entity
@@ -73,11 +72,25 @@ public class PlayerEntity extends InputAdapter implements Entity {
 		getGameCharacter().update();
 		handleAttackCooldown();
 		
-		body.setUserData(sprites[currentSprite]);
-		
 		currentVelocity = body.getLinearVelocity();
 		if(currentVelocity.x < MAX_SPEED && currentVelocity.x > -MAX_SPEED)
 			body.applyForceToCenter(velocity, true);
+		
+		if(body.getLinearVelocity().x != 0){
+			if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
+				body.setUserData(runLeft);
+			}
+			else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
+				body.setUserData(runRight);
+			}
+		}else{
+			if(direction == Direction.LEFT){
+				body.setUserData(idleLeft);
+			}else{
+				body.setUserData(idleRight);
+			}
+		}
+		
 	}
 	
 	@Override
@@ -89,17 +102,11 @@ public class PlayerEntity extends InputAdapter implements Entity {
 			}
 			break;
 		case Keys.LEFT:
-			if(direction != Direction.LEFT){
-				currentSprite = (currentSprite + 4) % 8;
-				direction = Direction.LEFT;
-			}
+			direction = Direction.LEFT;
 			velocity.x = -movementSpeed;
 			break;
 		case Keys.RIGHT:
-			if(direction != Direction.RIGHT){
-				currentSprite = (currentSprite + 4) % 8;
-				direction = Direction.RIGHT;
-			}
+			direction = Direction.RIGHT;
 			velocity.x = movementSpeed;
 			break;
 		case Keys.ALT_LEFT:
@@ -167,51 +174,48 @@ public class PlayerEntity extends InputAdapter implements Entity {
 			sprites[i].setSize(2, 2); // Size of body
 		}
 		
-		// Animations
+		// ANIMATIONS
+		// Strike right
 		Animation animation = new Animation(1 / 3f, new TextureRegion(sprites[0]), new TextureRegion(sprites[1]), new TextureRegion(sprites[0]));
 		animation.setPlayMode(Animation.NORMAL);
 		strikeRight = new AnimatedSprite(animation, true);
 		strikeRight.setSize(2, 2);
 		
+		// Strike left
 		animation = new Animation(1 / 3f, new TextureRegion(sprites[4]), new TextureRegion(sprites[5]), new TextureRegion(sprites[4]));
 		animation.setPlayMode(Animation.NORMAL);
 		strikeLeft = new AnimatedSprite(animation, true);
 		strikeLeft.setSize(2, 2);
-		
-		animation = new Animation(1 / 20f, new TextureRegion(sprites[2]), new TextureRegion(sprites[3]));
+	
+		// Run right
+		animation = new Animation(1 / 4f, new TextureRegion(sprites[2]), new TextureRegion(sprites[3]));
 		animation.setPlayMode(Animation.LOOP);
 		runRight = new AnimatedSprite(animation, true);
 		runRight.setSize(2, 2);
 		
-		animation = new Animation(1 / 20f, new TextureRegion(sprites[6]), new TextureRegion(sprites[7]));
-		animation.setPlayMode(Animation.NORMAL);
+		// Run left
+		animation = new Animation(1 / 4f, new TextureRegion(sprites[6]), new TextureRegion(sprites[7]));
+		animation.setPlayMode(Animation.LOOP);
 		runLeft = new AnimatedSprite(animation, true);
 		runLeft.setSize(2, 2);
+		
+		// Idle right
+		animation = new Animation(1, new TextureRegion(sprites[0]));
+		animation.setPlayMode(Animation.LOOP);
+		idleRight = new AnimatedSprite(animation, true);
+		idleRight.setSize(2, 2);
+		
+		// Idle left
+		animation = new Animation(1, new TextureRegion(sprites[4]));
+		animation.setPlayMode(Animation.LOOP);
+		idleLeft = new AnimatedSprite(animation, true);
+		idleLeft.setSize(2, 2);
 	}
 
-	@Override
-	public void setSprite(int spriteindex){
-		body.setUserData(sprites[spriteindex]);
-		currentSprite = spriteindex;
-	}
-	
 	@Override
 	public void dispose(){
 		for(int i = 0; i < sprites.length; i++){
 			sprites[0].getTexture().dispose();
 		}
-	}
-
-	public void playStrikeAnimation(){
-		animationStartTime = Gdx.graphics.getDeltaTime();
-		if(direction == Direction.LEFT){
-			body.setUserData(strikeLeft);
-		}else{
-			body.setUserData(strikeRight);
-		}
-	}
-	
-	private boolean isAnimating(){
-		return (strikeLeft.getAnimation().isAnimationFinished(animationStartTime) && strikeRight.getAnimation().isAnimationFinished(animationStartTime));
 	}
 }

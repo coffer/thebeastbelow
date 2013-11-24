@@ -192,9 +192,4 @@ public class NPCEntity implements Entity{
 		
 	}
 
-	@Override
-	public void setSprite(int spriteIndex) {
-		// TODO Auto-generated method stub
-		
-	}
 }

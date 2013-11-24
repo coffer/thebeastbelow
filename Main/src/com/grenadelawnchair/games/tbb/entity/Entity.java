@@ -16,9 +16,4 @@ public interface Entity {
 
 	public void dispose();
 	
-	/**
-	 * sprite index obtained from Constants class
-	 * @param spriteIndex
-	 */
-	public void setSprite(int spriteIndex);
 }

@@ -114,7 +114,6 @@ public class GameWorld implements Screen{
 						break;
 					case Keys.SPACE:
 						if(!(player.isAttackOnCooldown() || player.getGameCharacter().isParrying())){
-							player.playStrikeAnimation();
 							for(NPCEntity npc : npcList){
 								if(validHit(player, npc) && npc.getBody().isActive()){
 									CombatManager.strike(player.getGameCharacter(), npc.getGameCharacter());
