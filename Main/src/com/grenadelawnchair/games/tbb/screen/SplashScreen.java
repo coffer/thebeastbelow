@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.grenadelawnchair.com.games.tbb.utils.GrassSpriteAccessor;
 import com.grenadelawnchair.com.games.tbb.utils.SpriteModifier;
 
 public class SplashScreen implements Screen {
@@ -43,7 +44,7 @@ public class SplashScreen implements Screen {
 	public void show() {
 		batch = new SpriteBatch();
 		tweenManager = new TweenManager();
-		Tween.registerAccessor(Sprite.class, new SpriteModifier());
+		Tween.registerAccessor(Sprite.class, new GrassSpriteAccessor());
 		Texture splashTexture = new Texture("graphics/splash.png");
 		splash = new Sprite(splashTexture);
 		splash.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());

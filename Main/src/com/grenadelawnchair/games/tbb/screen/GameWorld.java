@@ -2,16 +2,25 @@ package com.grenadelawnchair.games.tbb.screen;
 
 import java.util.ArrayList;
 
+import aurelienribon.tweenengine.BaseTween;
+import aurelienribon.tweenengine.Timeline;
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenCallback;
+import aurelienribon.tweenengine.TweenManager;
+import aurelienribon.tweenengine.equations.Sine;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -24,7 +33,9 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.grenadelawnchair.com.games.tbb.utils.Constants;
 import com.grenadelawnchair.com.games.tbb.utils.Direction;
+import com.grenadelawnchair.com.games.tbb.utils.GrassSpriteAccessor;
 import com.grenadelawnchair.games.tbb.entity.Entity;
+import com.grenadelawnchair.games.tbb.entity.Grass;
 import com.grenadelawnchair.games.tbb.entity.NPCEntity;
 import com.grenadelawnchair.games.tbb.entity.PlayerEntity;
 import com.grenadelawnchair.games.tbb.model.CombatManager;
@@ -35,7 +46,7 @@ public class GameWorld implements Screen{
 	private Box2DDebugRenderer debugRenderer;
 	private float gravity = -9.81f;
 	private OrthographicCamera camera;
-	private final int ZOOM = 25;
+	private final int ZOOM = 50;
 	
 	private final float TIMESTEP = 1 / 60f;
 	private final int VELOCITYITERATIONS = 8, POSITIONITERATIONS = 3; // Can be set to higher if higher quality is desired
@@ -45,12 +56,36 @@ public class GameWorld implements Screen{
 	private PlayerEntity player;
 	private ArrayList<NPCEntity> npcList;
 	
+	private ArrayList<Grass> grassList;
+	
 	private Array<Body> tmpBodies = new Array<Body>();
+	
+	// GRASS
+	private TweenManager tweenManager;
+	private TextureAtlas atlas;
+	private Sprite grassSprite1;
+	private Sprite grassSprite2;
+	private Sprite grassSprite3;
 	
 	@Override
 	public void render(float delta) {
+//		tweenManager.update(Gdx.graphics.getDeltaTime());
+//		
+//		Gdx.gl.glClearColor(1, 1, 1, 1);
+//		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+//		
+//		batch.setProjectionMatrix(camera.combined);
+//		batch.begin();
+//		grassSprite3.draw(batch);
+//		grassSprite2.draw(batch);
+//		grassSprite1.draw(batch);
+//		batch.end();
+		
+
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		
+		tweenManager.update(delta);
 		
 		world.step(TIMESTEP, VELOCITYITERATIONS, POSITIONITERATIONS);
 		
@@ -64,9 +99,10 @@ public class GameWorld implements Screen{
 		camera.position.set(player.getBody().getPosition().x, player.getBody().getPosition().y, 0);
 		camera.update();
 		
-//		// Draw spites
+		// Draw spites
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
+		
 		world.getBodies(tmpBodies);
 		for(Body body : tmpBodies){
 			if(body.getUserData() != null && body.getUserData() instanceof Sprite){
@@ -77,6 +113,10 @@ public class GameWorld implements Screen{
 			}
 		}
 
+		grassSprite1.draw(batch);
+		grassSprite2.draw(batch);
+		grassSprite3.draw(batch);
+		
 		batch.end();
 		
 		debugRenderer.render(world, camera.combined);
@@ -93,6 +133,11 @@ public class GameWorld implements Screen{
 	@Override
 	public void show() {
 		npcList = new ArrayList<NPCEntity>();
+		grassList = new ArrayList<Grass>();
+		
+		tweenManager = new TweenManager();
+
+		
 		world  = new World(new Vector2(0, gravity), true);
 		debugRenderer = new Box2DDebugRenderer();
 		batch = new SpriteBatch();
@@ -117,7 +162,6 @@ public class GameWorld implements Screen{
 							for(NPCEntity npc : npcList){
 								if(validHit(player, npc) && npc.getBody().isActive()){
 									CombatManager.strike(player.getGameCharacter(), npc.getGameCharacter());
-									player.setAttackOnCooldown(true);
 								}
 							}
 						}
@@ -154,6 +198,25 @@ public class GameWorld implements Screen{
 		fixDef.restitution = 0;
 		
 		world.createBody(bodyDef).createFixture(fixDef);
+		
+		// GRASS
+		atlas = new TextureAtlas("graphics/world/grass.pack");
+		
+		grassSprite1 = atlas.createSprite("grass1");
+		grassSprite1.setSize(5, .4f);
+		grassSprite1.setPosition(0,0);
+		
+		grassSprite2 = atlas.createSprite("grass2");
+		grassSprite2.setSize(5, .4f);
+		grassSprite2.setPosition(0, 0);
+		
+		grassSprite3 = atlas.createSprite("grass3");
+		grassSprite3.setSize(5, .4f);
+		grassSprite3.setPosition(0, 0);
+		
+		Tween.registerAccessor(Sprite.class, new GrassSpriteAccessor());
+		Tween.call(windCallback).start(tweenManager);
+		//---------- GRASS
 		
 		groundShape.dispose();
 	}
@@ -211,4 +274,18 @@ public class GameWorld implements Screen{
 		}
 		return false;
 	}
+
+	private final TweenCallback windCallback = new TweenCallback() {
+		@Override
+		public void onEvent(int type, BaseTween<?> source) {
+			float d = MathUtils.random() * 0.5f + 0.5f;
+			float t = -0.2f * grassSprite1.getHeight(); // Amount of wind
+			
+			Timeline.createParallel()
+				.push(Tween.to(grassSprite1, GrassSpriteAccessor.SKEW_X2X3, d).target(t, t).ease(Sine.INOUT).repeatYoyo(1, 0).setCallback(windCallback))
+				.push(Tween.to(grassSprite2, GrassSpriteAccessor.SKEW_X2X3, d).target(t, t).ease(Sine.INOUT).delay(d/3).repeatYoyo(1, 0))
+				.push(Tween.to(grassSprite3, GrassSpriteAccessor.SKEW_X2X3, d).target(t, t).ease(Sine.INOUT).delay(d/3*2).repeatYoyo(1, 0))
+				.start(tweenManager);
+		}
+	};
 }
