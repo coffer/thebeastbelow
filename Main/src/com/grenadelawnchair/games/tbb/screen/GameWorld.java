@@ -15,7 +15,6 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -35,7 +34,6 @@ import com.grenadelawnchair.com.games.tbb.utils.Constants;
 import com.grenadelawnchair.com.games.tbb.utils.Direction;
 import com.grenadelawnchair.com.games.tbb.utils.GrassSpriteAccessor;
 import com.grenadelawnchair.games.tbb.entity.Entity;
-import com.grenadelawnchair.games.tbb.entity.Grass;
 import com.grenadelawnchair.games.tbb.entity.NPCEntity;
 import com.grenadelawnchair.games.tbb.entity.PlayerEntity;
 import com.grenadelawnchair.games.tbb.model.CombatManager;
@@ -46,7 +44,7 @@ public class GameWorld implements Screen{
 	private Box2DDebugRenderer debugRenderer;
 	private float gravity = -9.81f;
 	private OrthographicCamera camera;
-	private final int ZOOM = 50;
+	private final int ZOOM = 100;
 	
 	private final float TIMESTEP = 1 / 60f;
 	private final int VELOCITYITERATIONS = 8, POSITIONITERATIONS = 3; // Can be set to higher if higher quality is desired
@@ -55,8 +53,6 @@ public class GameWorld implements Screen{
 	
 	private PlayerEntity player;
 	private ArrayList<NPCEntity> npcList;
-	
-	private ArrayList<Grass> grassList;
 	
 	private Array<Body> tmpBodies = new Array<Body>();
 	
@@ -69,19 +65,6 @@ public class GameWorld implements Screen{
 	
 	@Override
 	public void render(float delta) {
-//		tweenManager.update(Gdx.graphics.getDeltaTime());
-//		
-//		Gdx.gl.glClearColor(1, 1, 1, 1);
-//		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-//		
-//		batch.setProjectionMatrix(camera.combined);
-//		batch.begin();
-//		grassSprite3.draw(batch);
-//		grassSprite2.draw(batch);
-//		grassSprite1.draw(batch);
-//		batch.end();
-		
-
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
@@ -133,10 +116,8 @@ public class GameWorld implements Screen{
 	@Override
 	public void show() {
 		npcList = new ArrayList<NPCEntity>();
-		grassList = new ArrayList<Grass>();
 		
 		tweenManager = new TweenManager();
-
 		
 		world  = new World(new Vector2(0, gravity), true);
 		debugRenderer = new Box2DDebugRenderer();
