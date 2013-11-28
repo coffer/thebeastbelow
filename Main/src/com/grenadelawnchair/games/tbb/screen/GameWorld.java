@@ -140,6 +140,7 @@ public class GameWorld implements Screen{
 						break;
 					case Keys.SPACE:
 						if(!(player.isAttackOnCooldown() || player.getGameCharacter().isParrying())){
+							System.out.println("Space pressed");
 							for(NPCEntity npc : npcList){
 								if(validHit(player, npc) && npc.getBody().isActive()){
 									CombatManager.strike(player.getGameCharacter(), npc.getGameCharacter());

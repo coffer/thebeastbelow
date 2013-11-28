@@ -143,13 +143,13 @@ public class PlayerEntity extends InputAdapter implements Entity {
 		
 		// ANIMATIONS
 		// Strike right
-		Animation animation = new Animation(1 / 2f, new TextureRegion(sprites[1]), new TextureRegion(sprites[0]));
+		Animation animation = new Animation(1 / 2f, new TextureRegion(sprites[1])/*, new TextureRegion(sprites[0])*/);
 		animation.setPlayMode(Animation.LOOP);
 		strikeRight = new AnimatedSprite(animation, true);
 		strikeRight.setSize(2, 2);
 		
 		// Strike left
-		animation = new Animation(1 / 2f, new TextureRegion(sprites[5]), new TextureRegion(sprites[4]));
+		animation = new Animation(1 / 2f, new TextureRegion(sprites[5])/*, new TextureRegion(sprites[4])*/);
 		animation.setPlayMode(Animation.LOOP);
 		strikeLeft = new AnimatedSprite(animation, true);
 		strikeLeft.setSize(2, 2);
@@ -187,20 +187,23 @@ public class PlayerEntity extends InputAdapter implements Entity {
 	}
 
 	private void playAnimation(){
-		if(Gdx.input.isKeyPressed(Input.Keys.SPACE) && !isAttackOnCooldown()){
+		if(Gdx.input.isKeyPressed(Input.Keys.SPACE) && !isAttackOnCooldown() && !getGameCharacter().isParrying()){
 			striking = true;
 			setAttackOnCooldown(true);
+			System.out.println("striking = true");
 		}
 		// Set the timer for the attack animation
 		if(striking){
 			animationCooldown += Gdx.app.getGraphics().getDeltaTime();
 			if(animationCooldown >= 1/2f){
+				System.out.println("striking off cooldown");
 			    striking = false;
 			    animationCooldown = 0; //reset
 			}
 		}
 		// If the striking cooldown is 0, display normal animations
 		if(striking){
+			System.out.print("play");
 			if(direction == Direction.LEFT){
 				body.setUserData(strikeLeft);
 			}else{
